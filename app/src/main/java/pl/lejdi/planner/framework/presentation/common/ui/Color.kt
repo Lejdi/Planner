@@ -1,4 +1,4 @@
-package pl.lejdi.planner.ui.theme
+package pl.lejdi.planner.framework.presentation.common.ui
 
 import androidx.compose.ui.graphics.Color
 
