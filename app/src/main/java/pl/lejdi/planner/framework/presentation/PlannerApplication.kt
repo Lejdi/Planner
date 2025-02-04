@@ -1,4 +1,7 @@
 package pl.lejdi.planner.framework.presentation
 
-class PlannerApplication {
-}
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class PlannerApplication : Application()
