@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import pl.lejdi.planner.framework.presentation.util.ErrorsQueue
@@ -33,21 +32,7 @@ abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : Vi
         _viewState.value = newState
     }
 
-    private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
-
-    init {
-        subscribeToEvents()
-    }
-
-    fun setEvent(event: Event) {
-        viewModelScope.launch { _event.emit(event) }
-    }
-
-    private fun subscribeToEvents() {
-        viewModelScope.launch { _event.collect { handleEvents(it) } }
-    }
-
-    abstract fun handleEvents(event: Event)
+    abstract fun sendEvent(event: Event)
 
     protected fun setEffect(builder: () -> Effect) {
         val effectValue = builder()

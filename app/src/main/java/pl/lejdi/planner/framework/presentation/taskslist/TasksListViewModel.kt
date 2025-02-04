@@ -20,7 +20,7 @@ class TasksListViewModel(
         tasksList = emptyList()
     )
 
-    override fun handleEvents(event: TasksListContract.Event) {
+    override fun sendEvent(event: TasksListContract.Event) {
         when(event){
             is TasksListContract.Event.RefreshTasks -> {
                 setState {
