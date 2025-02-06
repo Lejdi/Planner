@@ -17,19 +17,22 @@ class TasksDataSourceImpl(
 
     override suspend fun addTask(task: TaskEntity): CacheResult<Unit> {
         return safeCacheCall(Dispatchers.IO) {
-            tasksDao.insertTask(task)
+            val result = tasksDao.insertTask(task)
+            if(result < 0L) throw Exception()
         }
     }
 
     override suspend fun deleteTask(task: TaskEntity): CacheResult<Unit> {
         return safeCacheCall(Dispatchers.IO) {
-            tasksDao.deleteTask(task)
+            val result = tasksDao.deleteTask(task)
+            if(result != 1) throw Exception()
         }
     }
 
     override suspend fun updateTask(task: TaskEntity): CacheResult<Unit> {
         return safeCacheCall(Dispatchers.IO) {
-            tasksDao.updateTask(task)
+            val result = tasksDao.updateTask(task)
+            if(result != 1) throw Exception()
         }
     }
 
