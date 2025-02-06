@@ -1,19 +1,36 @@
 package pl.lejdi.planner.business.data.cache.tasksdatasource
 
-class TasksDataSourceImpl : TasksDataSource {
-    override fun getAllTasks() {
-        TODO("Not yet implemented")
+import kotlinx.coroutines.Dispatchers
+import pl.lejdi.planner.business.data.cache.utl.CacheResult
+import pl.lejdi.planner.business.data.cache.utl.safeCacheCall
+import pl.lejdi.planner.framework.datasource.cache.dao.TasksDao
+import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntity
+
+class TasksDataSourceImpl(
+    private val tasksDao: TasksDao
+) : TasksDataSource {
+    override suspend fun getAllTasks(): CacheResult<List<TaskEntity>> {
+        return safeCacheCall(Dispatchers.IO) {
+            tasksDao.getAllTasks()
+        }
     }
 
-    override fun getTaskById() {
-        TODO("Not yet implemented")
+    override suspend fun addTask(task: TaskEntity): CacheResult<Unit> {
+        return safeCacheCall(Dispatchers.IO) {
+            tasksDao.insertTask(task)
+        }
     }
 
-    override fun updateTask() {
-        TODO("Not yet implemented")
+    override suspend fun deleteTask(task: TaskEntity): CacheResult<Unit> {
+        return safeCacheCall(Dispatchers.IO) {
+            tasksDao.deleteTask(task)
+        }
     }
 
-    override fun deleteTask() {
-        TODO("Not yet implemented")
+    override suspend fun updateTask(task: TaskEntity): CacheResult<Unit> {
+        return safeCacheCall(Dispatchers.IO) {
+            tasksDao.updateTask(task)
+        }
     }
+
 }

@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pl.lejdi.planner.business.utils.date.DateFormatProvider
-import pl.lejdi.planner.business.utils.date.DateUtil
-import pl.lejdi.planner.business.utils.date.DateUtilImpl
+import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.DateFormatterImpl
 import pl.lejdi.planner.business.utils.date.DefaultDateFormatProvider
 
 
@@ -26,9 +26,9 @@ abstract class BindingCommonModule {
 object CommonModule {
 
     @Provides
-    fun provideDateUtil(
+    fun provideDateFormatter(
         formatProvider: DateFormatProvider
-    ) : DateUtil {
-        return DateUtilImpl(formatProvider)
+    ) : DateFormatter {
+        return DateFormatterImpl(formatProvider)
     }
 }

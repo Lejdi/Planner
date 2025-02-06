@@ -2,7 +2,6 @@ package pl.lejdi.planner.framework.presentation.taskslist
 
 import androidx.lifecycle.viewModelScope
 import pl.lejdi.planner.business.usecases.UseCaseResult
-import pl.lejdi.planner.business.usecases.common.DeleteTask
 import pl.lejdi.planner.business.usecases.taskslist.DeleteOutdatedTasks
 import pl.lejdi.planner.business.usecases.taskslist.GetTasksForDate
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
