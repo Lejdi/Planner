@@ -1,17 +1,20 @@
 package pl.lejdi.planner.framework.presentation.taskslist
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.lejdi.planner.business.usecases.UseCaseResult
+import pl.lejdi.planner.business.usecases.edittask.DeleteTask
 import pl.lejdi.planner.business.usecases.taskslist.DeleteOutdatedTasks
 import pl.lejdi.planner.business.usecases.taskslist.GetTasksForDate
+import pl.lejdi.planner.business.usecases.taskslist.TasksListUseCases
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
 import pl.lejdi.planner.framework.presentation.util.ErrorType
 import java.util.Date
+import javax.inject.Inject
 
-class TasksListViewModel(
-    val deleteTaskUseCase: DeleteTask,
-    val deleteOutdatedTasksUseCase: DeleteOutdatedTasks,
-    val getTasksForDateUseCase: GetTasksForDate
+@HiltViewModel
+class TasksListViewModel @Inject constructor(
+    val tasksListUseCases: TasksListUseCases
 ) : BaseViewModel<TasksListContract.Event, TasksListContract.State, TasksListContract.Effect>() {
     override fun setInitialState() = TasksListContract.State(
         isLoading = true,
@@ -27,7 +30,7 @@ class TasksListViewModel(
                         isLoading = true
                     )
                 }
-                getTasksForDateUseCase(
+                tasksListUseCases.getTasksForDate(
                     params = Date(),
                     scope = viewModelScope,
                     onResult = { result ->

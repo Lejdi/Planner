@@ -7,8 +7,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSource
+import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSourceImpl
+import pl.lejdi.planner.business.utils.date.DateFormatter
 import pl.lejdi.planner.framework.datasource.cache.CacheDatabase
 import pl.lejdi.planner.framework.datasource.cache.dao.TasksDao
+import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import javax.inject.Singleton
 
 @Module
@@ -30,5 +34,17 @@ object CacheModule {
     @Provides
     fun provideTasksDao(cacheDatabase: CacheDatabase): TasksDao {
         return cacheDatabase.getTasksDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideTasksDataSource(tasksDao: TasksDao) : TasksDataSource {
+        return TasksDataSourceImpl(tasksDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCacheTaskMapper(dateFormatter: DateFormatter) : TaskEntityMapper {
+        return TaskEntityMapper(dateFormatter)
     }
 }
