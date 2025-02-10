@@ -1,5 +1,6 @@
 package pl.lejdi.planner.framework.presentation.taskslist
 
+import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 import pl.lejdi.planner.framework.presentation.util.ErrorsQueue
 import pl.lejdi.planner.framework.presentation.util.ViewEffect
@@ -9,7 +10,7 @@ import pl.lejdi.planner.framework.presentation.util.ViewState
 class TasksListContract  {
 
     sealed class Event : ViewEvent {
-        data class TaskClicked(val taskId: String) : Event()
+        data class TaskClicked(val task: TaskDisplayable) : Event()
         data object RefreshTasks : Event()
     }
 
@@ -20,6 +21,6 @@ class TasksListContract  {
     ) : ViewState
 
     sealed class Effect : ViewEffect {
-        data class NavigateToDetails(val taskId: String) : Effect()
+        data class NavigateToDetails(val task: Task) : Effect()
     }
 }

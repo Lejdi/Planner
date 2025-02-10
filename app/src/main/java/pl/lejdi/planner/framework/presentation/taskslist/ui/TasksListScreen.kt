@@ -1,41 +1,45 @@
 package pl.lejdi.planner.framework.presentation.taskslist.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
-import pl.lejdi.planner.framework.presentation.taskslist.TasksListContract
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.Serializable
+import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.framework.presentation.taskslist.TasksListContract
+import pl.lejdi.planner.framework.presentation.taskslist.TasksListViewModel
+
+@Serializable
+object TasksListScreenRoute
 
 @Composable
 fun TasksListScreen(
-    state: TasksListContract.State,
-    effectFlow: Flow<TasksListContract.Effect>?,
-    onEventSent: (TasksListContract.Event) -> Unit,
-    onNavigationRequested: (String) -> Unit
+    navigateToDetails: (Task) -> Unit,
+    viewModel: TasksListViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(effectFlow) {
-        effectFlow?.onEach { effect ->
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.onEach { effect ->
             when (effect) {
                 is TasksListContract.Effect.NavigateToDetails -> {
-                    onNavigationRequested("1")
+                    navigateToDetails(effect.task)
                 }
             }
-        }?.collect()
+        }.collect()
     }
-    Box {
-        Button(
-            onClick = {
-                onEventSent(TasksListContract.Event.TaskClicked("1"))
-            },
-            content = {
-                state.tasksList.forEach {
-                    Text("lel")
+    Column {
+        viewModel.viewState.value.tasksList.forEach { task ->
+            Button(
+                onClick = {
+                    viewModel.sendEvent(TasksListContract.Event.TaskClicked(task))
+                },
+                content = {
+                    Text(task.name)
                 }
-            }
-        )
+            )
+        }
     }
 }

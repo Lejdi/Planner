@@ -3,9 +3,6 @@ package pl.lejdi.planner.framework.presentation.taskslist
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.lejdi.planner.business.usecases.UseCaseResult
-import pl.lejdi.planner.business.usecases.edittask.DeleteTask
-import pl.lejdi.planner.business.usecases.taskslist.DeleteOutdatedTasks
-import pl.lejdi.planner.business.usecases.taskslist.GetTasksForDate
 import pl.lejdi.planner.business.usecases.taskslist.TasksListUseCases
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
 import pl.lejdi.planner.framework.presentation.util.ErrorType
@@ -55,7 +52,8 @@ class TasksListViewModel @Inject constructor(
             }
             is TasksListContract.Event.TaskClicked -> {
                 setEffect {
-                    TasksListContract.Effect.NavigateToDetails(event.taskId)
+                    //todo temp solution mapper not from usecase
+                    TasksListContract.Effect.NavigateToDetails(tasksListUseCases.markTaskComplete.taskDisplayableMapper.mapToBusinessModel(event.task))
                 }
             }
         }

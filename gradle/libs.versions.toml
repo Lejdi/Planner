@@ -11,6 +11,9 @@ composeBom = "2025.01.01"
 hilt = "2.51.1"
 room = "2.6.1"
 ksp = "2.0.21-1.0.27"
+compose_navigation = "2.8.6"
+serialization = "1.6.3"
+hilt_compose_navigation = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +36,9 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-test = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+androidx-compose-navigation = { group= "androidx.navigation", name = "navigation-compose", version.ref = "compose_navigation"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+androidx-hilt-navigation = { group= "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_compose_navigation"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -43,4 +49,5 @@ kapt = { id = 'kotlin-kapt'}
 android-hilt = { id = 'com.google.dagger.hilt.android' }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 room = { id = "androidx.room", version.ref = "room"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -60,14 +61,17 @@ dependencies {
     implementation(libs.androidx.material3)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.kotlinx.serialization.json)
 
     //compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.navigation)
 
     //hilt
     implementation(libs.android.hilt)
     kapt(libs.android.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation)
 
     //room
     implementation(libs.room.runtime)
