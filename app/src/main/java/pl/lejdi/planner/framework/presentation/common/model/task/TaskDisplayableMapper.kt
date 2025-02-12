@@ -29,7 +29,15 @@ class TaskDisplayableMapper(
             endDate = dateFormatter.formatDateToDisplayable(businessModel.endDate),
             daysInterval = businessModel.daysInterval.toString(),
             hour = businessModel.hour,
-            asap = businessModel.asap
+            asap = businessModel.asap,
+            priority = calculatePriority(businessModel)
         )
+    }
+
+    private fun calculatePriority(task: Task) : Int {
+        if(task.hour != null) return 1
+        if(task.asap) return 2
+        if(task.daysInterval == 0) return 3
+        return 4
     }
 }

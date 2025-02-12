@@ -5,19 +5,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.lejdi.planner.business.usecases.UseCaseResult
 import pl.lejdi.planner.business.usecases.taskslist.TasksListUseCases
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
+import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 import pl.lejdi.planner.framework.presentation.util.ErrorType
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksListViewModel @Inject constructor(
-    val tasksListUseCases: TasksListUseCases
+    private val tasksListUseCases: TasksListUseCases,
+    private val taskDisplayableMapper: TaskDisplayableMapper
 ) : BaseViewModel<TasksListContract.Event, TasksListContract.State, TasksListContract.Effect>() {
-    override fun setInitialState() = TasksListContract.State(
-        isLoading = true,
-        errors = errorsQueue,
-        tasksList = emptyList()
-    )
+    override fun setInitialState() : TasksListContract.State{
+        return TasksListContract.State(
+            isLoading = true,
+            errors = errorsQueue,
+            daysTasksMap = emptyMap()
+        )
+    }
 
     override fun sendEvent(event: TasksListContract.Event) {
         when(event){
@@ -27,8 +30,8 @@ class TasksListViewModel @Inject constructor(
                         isLoading = true
                     )
                 }
-                tasksListUseCases.getTasksForDate(
-                    params = Date(),
+                tasksListUseCases.getTasksForDashboard(
+                    params = Unit,
                     scope = viewModelScope,
                     onResult = { result ->
                         if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
@@ -40,7 +43,7 @@ class TasksListViewModel @Inject constructor(
                                         setState {
                                             copy(
                                                 isLoading = false,
-                                                tasksList = useCaseResult.data
+                                                daysTasksMap = useCaseResult.data
                                             )
                                         }
                                     }
@@ -52,8 +55,7 @@ class TasksListViewModel @Inject constructor(
             }
             is TasksListContract.Event.TaskClicked -> {
                 setEffect {
-                    //todo temp solution mapper not from usecase
-                    TasksListContract.Effect.NavigateToDetails(tasksListUseCases.markTaskComplete.taskDisplayableMapper.mapToBusinessModel(event.task))
+                    TasksListContract.Effect.NavigateToDetails(taskDisplayableMapper.mapToBusinessModel(event.task))
                 }
             }
         }

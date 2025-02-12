@@ -6,6 +6,7 @@ import pl.lejdi.planner.framework.presentation.util.ErrorsQueue
 import pl.lejdi.planner.framework.presentation.util.ViewEffect
 import pl.lejdi.planner.framework.presentation.util.ViewEvent
 import pl.lejdi.planner.framework.presentation.util.ViewState
+import java.util.Date
 
 class TasksListContract  {
 
@@ -17,7 +18,7 @@ class TasksListContract  {
     data class State(
         var isLoading: Boolean,
         var errors: ErrorsQueue,
-        var tasksList: List<TaskDisplayable>
+        var daysTasksMap: Map<Date, List<TaskDisplayable>>
     ) : ViewState
 
     sealed class Effect : ViewEffect {

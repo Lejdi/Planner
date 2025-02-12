@@ -15,7 +15,7 @@ import pl.lejdi.planner.framework.presentation.util.ErrorType
 class MarkTaskComplete(
     private val tasksDataSource: TasksDataSource,
     private val taskEntityMapper: TaskEntityMapper,
-    val taskDisplayableMapper: TaskDisplayableMapper,
+    private val taskDisplayableMapper: TaskDisplayableMapper,
 ) : UseCase<UseCaseResult<Unit>, TaskDisplayable>() {
 
     override suspend fun execute(taskDisplayable: TaskDisplayable): UseCaseResult<Unit> {

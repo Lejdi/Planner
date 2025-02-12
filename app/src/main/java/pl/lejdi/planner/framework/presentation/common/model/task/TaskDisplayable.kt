@@ -9,4 +9,5 @@ data class TaskDisplayable (
     val hour: String?,
     val daysInterval: String,
     val asap: Boolean,
+    val priority: Int, //order of displaying on list, lower number equals bigger priority
 )

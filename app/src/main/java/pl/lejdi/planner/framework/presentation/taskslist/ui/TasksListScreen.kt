@@ -18,7 +18,7 @@ object TasksListScreenRoute
 
 @Composable
 fun TasksListScreen(
-    navigateToDetails: (Task) -> Unit,
+    navigateToDetails: (Task?) -> Unit,
     viewModel: TasksListViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.effect) {
@@ -31,15 +31,18 @@ fun TasksListScreen(
         }.collect()
     }
     Column {
-        viewModel.viewState.value.tasksList.forEach { task ->
-            Button(
-                onClick = {
-                    viewModel.sendEvent(TasksListContract.Event.TaskClicked(task))
-                },
-                content = {
-                    Text(task.name)
-                }
-            )
+        viewModel.viewState.value.daysTasksMap.forEach { (_, taskList) ->
+            taskList.forEach { task ->
+                Button(
+                    onClick = {
+                        viewModel.sendEvent(TasksListContract.Event.TaskClicked(task))
+                    },
+                    content = {
+                        Text(task.name)
+                    }
+                )
+            }
+
         }
     }
 }

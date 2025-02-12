@@ -11,18 +11,20 @@ import pl.lejdi.planner.framework.presentation.edittask.EditTaskViewModel
 
 @Serializable
 data class EditTaskScreenRoute(
-    val taskDetails: Task
+    val taskDetails: Task?
 )
 
 @Composable
 fun EditTaskScreen(
-    taskDetails: Task,
+    taskDetails: Task?,
     navigateBack: () -> Unit,
     viewModel: EditTaskViewModel = hiltViewModel()
 ) {
     Column {
-        Text(taskDetails.name)
-        Text(taskDetails.startDate.toString())
+        taskDetails?.let{
+            Text(it.name)
+            Text(it.startDate.toString())
+        }
         Button( onClick =  {
             navigateBack()
         },
