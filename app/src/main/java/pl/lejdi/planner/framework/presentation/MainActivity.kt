@@ -11,8 +11,8 @@ import androidx.navigation.toRoute
 import pl.lejdi.planner.framework.presentation.common.ui.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
-import pl.lejdi.planner.framework.presentation.taskslist.ui.TasksListScreen
-import pl.lejdi.planner.framework.presentation.taskslist.ui.TasksListScreenRoute
+import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreen
+import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,10 +23,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = TasksListScreenRoute,
+                    startDestination = DashboardScreenRoute,
                 ) {
-                    composable<TasksListScreenRoute> {
-                        TasksListScreen(
+                    composable<DashboardScreenRoute> {
+                        DashboardScreen(
                             navigateToDetails = { task ->
                                 navController.navigate(
                                     EditTaskScreenRoute(task)

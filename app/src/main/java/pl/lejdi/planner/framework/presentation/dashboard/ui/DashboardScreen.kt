@@ -1,4 +1,4 @@
-package pl.lejdi.planner.framework.presentation.taskslist.ui
+package pl.lejdi.planner.framework.presentation.dashboard.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -10,21 +10,21 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
-import pl.lejdi.planner.framework.presentation.taskslist.TasksListContract
-import pl.lejdi.planner.framework.presentation.taskslist.TasksListViewModel
+import pl.lejdi.planner.framework.presentation.dashboard.DashboardContract
+import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
 
 @Serializable
-object TasksListScreenRoute
+object DashboardScreenRoute
 
 @Composable
-fun TasksListScreen(
+fun DashboardScreen(
     navigateToDetails: (Task?) -> Unit,
-    viewModel: TasksListViewModel = hiltViewModel()
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                is TasksListContract.Effect.NavigateToDetails -> {
+                is DashboardContract.Effect.NavigateToDetails -> {
                     navigateToDetails(effect.task)
                 }
             }
@@ -35,7 +35,7 @@ fun TasksListScreen(
             taskList.forEach { task ->
                 Button(
                     onClick = {
-                        viewModel.sendEvent(TasksListContract.Event.TaskClicked(task))
+                        viewModel.sendEvent(DashboardContract.Event.TaskClicked(task))
                     },
                     content = {
                         Text(task.name)

@@ -119,7 +119,7 @@ object UseCasesModule {
 
     @ViewModelScoped
     @Provides
-    fun provideTasksListUseCases(
+    fun provideDashboardUseCases(
         deleteOutdatedTasks: DeleteOutdatedTasks,
         markTaskComplete: MarkTaskComplete,
         getTasksForDashboard: GetTasksForDashboard

@@ -1,4 +1,4 @@
-package pl.lejdi.planner.framework.presentation.taskslist
+package pl.lejdi.planner.framework.presentation.dashboard
 
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
@@ -8,7 +8,7 @@ import pl.lejdi.planner.framework.presentation.util.ViewEvent
 import pl.lejdi.planner.framework.presentation.util.ViewState
 import java.util.Date
 
-class TasksListContract  {
+class DashboardContract  {
 
     sealed class Event : ViewEvent {
         data class TaskClicked(val task: TaskDisplayable) : Event()

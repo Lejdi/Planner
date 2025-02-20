@@ -1,36 +1,36 @@
-package pl.lejdi.planner.framework.presentation.taskslist
+package pl.lejdi.planner.framework.presentation.dashboard
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.lejdi.planner.business.usecases.UseCaseResult
-import pl.lejdi.planner.business.usecases.taskslist.TasksListUseCases
+import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 import pl.lejdi.planner.framework.presentation.util.ErrorType
 import javax.inject.Inject
 
 @HiltViewModel
-class TasksListViewModel @Inject constructor(
-    private val tasksListUseCases: TasksListUseCases,
+class DashboardViewModel @Inject constructor(
+    private val dashboardUseCases: DashboardUseCases,
     private val taskDisplayableMapper: TaskDisplayableMapper
-) : BaseViewModel<TasksListContract.Event, TasksListContract.State, TasksListContract.Effect>() {
-    override fun setInitialState() : TasksListContract.State{
-        return TasksListContract.State(
+) : BaseViewModel<DashboardContract.Event, DashboardContract.State, DashboardContract.Effect>() {
+    override fun setInitialState() : DashboardContract.State{
+        return DashboardContract.State(
             isLoading = true,
             errors = errorsQueue,
             daysTasksMap = emptyMap()
         )
     }
 
-    override fun sendEvent(event: TasksListContract.Event) {
+    override fun sendEvent(event: DashboardContract.Event) {
         when(event){
-            is TasksListContract.Event.RefreshTasks -> {
+            is DashboardContract.Event.RefreshTasks -> {
                 setState {
                     copy(
                         isLoading = true
                     )
                 }
-                tasksListUseCases.getTasksForDashboard(
+                dashboardUseCases.getTasksForDashboard(
                     params = Unit,
                     scope = viewModelScope,
                     onResult = { result ->
@@ -53,9 +53,9 @@ class TasksListViewModel @Inject constructor(
                     }
                 )
             }
-            is TasksListContract.Event.TaskClicked -> {
+            is DashboardContract.Event.TaskClicked -> {
                 setEffect {
-                    TasksListContract.Effect.NavigateToDetails(taskDisplayableMapper.mapToBusinessModel(event.task))
+                    DashboardContract.Effect.NavigateToDetails(taskDisplayableMapper.mapToBusinessModel(event.task))
                 }
             }
         }

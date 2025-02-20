@@ -1,4 +1,4 @@
-package pl.lejdi.planner.business.usecases.taskslist
+package pl.lejdi.planner.business.usecases.dashboard
 
 import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreInteractor
 import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSource

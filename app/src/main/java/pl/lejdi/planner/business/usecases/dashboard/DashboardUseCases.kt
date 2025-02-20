@@ -1,6 +1,6 @@
-package pl.lejdi.planner.business.usecases.taskslist
+package pl.lejdi.planner.business.usecases.dashboard
 
-class TasksListUseCases(
+class DashboardUseCases(
     val deleteOutdatedTasks: DeleteOutdatedTasks,
     val getTasksForDashboard: GetTasksForDashboard,
     val markTaskComplete: MarkTaskComplete,
