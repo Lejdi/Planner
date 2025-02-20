@@ -1,4 +1,4 @@
-package pl.lejdi.planner.business.data.cache.utl
+package pl.lejdi.planner.business.data.cache.util
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

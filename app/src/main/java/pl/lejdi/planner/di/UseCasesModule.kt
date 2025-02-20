@@ -5,15 +5,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreInteractor
 import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSource
 import pl.lejdi.planner.business.usecases.edittask.AddTask
 import pl.lejdi.planner.business.usecases.edittask.DeleteTask
 import pl.lejdi.planner.business.usecases.edittask.EditTask
 import pl.lejdi.planner.business.usecases.edittask.EditTaskUseCases
-import pl.lejdi.planner.business.usecases.taskslist.DeleteOutdatedTasks
-import pl.lejdi.planner.business.usecases.taskslist.GetTasksForDashboard
-import pl.lejdi.planner.business.usecases.taskslist.MarkTaskComplete
-import pl.lejdi.planner.business.usecases.taskslist.TasksListUseCases
+import pl.lejdi.planner.business.usecases.dashboard.DeleteOutdatedTasks
+import pl.lejdi.planner.business.usecases.dashboard.GetTasksForDashboard
+import pl.lejdi.planner.business.usecases.dashboard.MarkTaskComplete
+import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 
@@ -65,11 +66,12 @@ object UseCasesModule {
     fun provideDeleteOutdatedTasksUseCase(
         tasksDataSource: TasksDataSource,
         taskEntityMapper: TaskEntityMapper,
-        taskDisplayableMapper: TaskDisplayableMapper
+        lastCacheCleanupDataStoreInteractor: LastCacheCleanupDataStoreInteractor
     ) : DeleteOutdatedTasks {
         return DeleteOutdatedTasks(
             tasksDataSource = tasksDataSource,
             taskEntityMapper = taskEntityMapper,
+            lastCacheCleanupDataStoreInteractor = lastCacheCleanupDataStoreInteractor,
         )
     }
 
@@ -121,8 +123,8 @@ object UseCasesModule {
         deleteOutdatedTasks: DeleteOutdatedTasks,
         markTaskComplete: MarkTaskComplete,
         getTasksForDashboard: GetTasksForDashboard
-    ) : TasksListUseCases {
-        return TasksListUseCases(
+    ) : DashboardUseCases {
+        return DashboardUseCases(
             deleteOutdatedTasks = deleteOutdatedTasks,
             markTaskComplete = markTaskComplete,
             getTasksForDashboard = getTasksForDashboard,

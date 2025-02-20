@@ -1,8 +1,8 @@
 package pl.lejdi.planner.business.data.cache.tasksdatasource
 
 import kotlinx.coroutines.Dispatchers
-import pl.lejdi.planner.business.data.cache.utl.CacheResult
-import pl.lejdi.planner.business.data.cache.utl.safeCacheCall
+import pl.lejdi.planner.business.data.cache.util.CacheResult
+import pl.lejdi.planner.business.data.cache.util.safeCacheCall
 import pl.lejdi.planner.framework.datasource.cache.dao.TasksDao
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntity
 

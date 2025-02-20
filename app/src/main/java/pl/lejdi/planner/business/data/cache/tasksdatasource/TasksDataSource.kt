@@ -1,6 +1,6 @@
 package pl.lejdi.planner.business.data.cache.tasksdatasource
 
-import pl.lejdi.planner.business.data.cache.utl.CacheResult
+import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntity
 
 interface TasksDataSource {
