@@ -8,12 +8,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import dagger.hilt.android.AndroidEntryPoint
+import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.business.data.model.TaskType
 import pl.lejdi.planner.framework.presentation.common.ui.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreen
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenRoute
+import kotlin.reflect.typeOf
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,9 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                    composable<EditTaskScreenRoute> {
+                    composable<EditTaskScreenRoute>(
+                        typeMap = mapOf(typeOf<Task?>() to TaskType)
+                    ) {
                         val args = it.toRoute<EditTaskScreenRoute>()
                         EditTaskScreen(
                             taskDetails = args.taskDetails,
