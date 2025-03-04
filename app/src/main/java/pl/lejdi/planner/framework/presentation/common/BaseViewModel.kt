@@ -16,6 +16,8 @@ import pl.lejdi.planner.framework.presentation.util.ViewState
 abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : ViewEffect>
     : ViewModel() {
 
+    val errorsQueue = ErrorsQueue()
+
     private val initialState: UiState by lazy { setInitialState() }
     abstract fun setInitialState(): UiState
 
@@ -24,8 +26,6 @@ abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : Vi
 
     private val _effect: Channel<Effect> = Channel()
     val effect = _effect.receiveAsFlow()
-
-    val errorsQueue = ErrorsQueue()
 
     protected fun setState(reducer: UiState.() -> UiState) {
         val newState = viewState.value.reducer()

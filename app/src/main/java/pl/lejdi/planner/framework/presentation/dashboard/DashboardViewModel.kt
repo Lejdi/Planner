@@ -14,11 +14,16 @@ class DashboardViewModel @Inject constructor(
     private val dashboardUseCases: DashboardUseCases,
     private val taskDisplayableMapper: TaskDisplayableMapper
 ) : BaseViewModel<DashboardContract.Event, DashboardContract.State, DashboardContract.Effect>() {
+
+    init {
+        sendEvent(DashboardContract.Event.RefreshTasks)
+    }
+
     override fun setInitialState() : DashboardContract.State{
         return DashboardContract.State(
             isLoading = true,
             errors = errorsQueue,
-            daysTasksMap = emptyMap()
+            daysTasksMap = emptyList()
         )
     }
 
@@ -53,10 +58,39 @@ class DashboardViewModel @Inject constructor(
                     }
                 )
             }
-            is DashboardContract.Event.TaskClicked -> {
+            is DashboardContract.Event.EditButtonClicked -> {
                 setEffect {
                     DashboardContract.Effect.NavigateToDetails(taskDisplayableMapper.mapToBusinessModel(event.task))
                 }
+            }
+            is DashboardContract.Event.AddButtonClicked -> {
+                setEffect {
+                    DashboardContract.Effect.NavigateToDetails(null)
+                }
+            }
+            is DashboardContract.Event.CompleteButtonClicked -> {
+                setState {
+                    copy(
+                        isLoading = true
+                    )
+                }
+                dashboardUseCases.markTaskComplete(
+                    params = event.task,
+                    scope = viewModelScope,
+                    onResult = { result ->
+                        if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
+                        else{
+                            result.getOrNull()?.let { useCaseResult ->
+                                when(useCaseResult){
+                                    is UseCaseResult.Error -> errorsQueue.addError(useCaseResult.error)
+                                    is UseCaseResult.Success -> {
+                                        //TODO refresh dashboard if success
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
             }
         }
     }

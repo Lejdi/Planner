@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
 import pl.lejdi.planner.business.data.model.Task
-import pl.lejdi.planner.business.data.model.TaskType
+import pl.lejdi.planner.framework.presentation.common.navigation.NavTypes
 import pl.lejdi.planner.framework.presentation.common.ui.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable<EditTaskScreenRoute>(
-                        typeMap = mapOf(typeOf<Task?>() to TaskType)
+                        typeMap = mapOf(typeOf<Task?>() to NavTypes.TaskType)
                     ) {
                         val args = it.toRoute<EditTaskScreenRoute>()
                         EditTaskScreen(

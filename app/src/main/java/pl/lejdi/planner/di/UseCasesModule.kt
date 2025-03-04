@@ -15,6 +15,7 @@ import pl.lejdi.planner.business.usecases.dashboard.DeleteOutdatedTasks
 import pl.lejdi.planner.business.usecases.dashboard.GetTasksForDashboard
 import pl.lejdi.planner.business.usecases.dashboard.MarkTaskComplete
 import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
+import pl.lejdi.planner.business.utils.date.DateFormatter
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 
@@ -94,12 +95,14 @@ object UseCasesModule {
     fun provideGetTasksForDashboardUseCase(
         tasksDataSource: TasksDataSource,
         taskEntityMapper: TaskEntityMapper,
-        taskDisplayableMapper: TaskDisplayableMapper
+        taskDisplayableMapper: TaskDisplayableMapper,
+        dateFormatter: DateFormatter
     ) : GetTasksForDashboard {
         return GetTasksForDashboard(
             tasksDataSource = tasksDataSource,
             taskEntityMapper = taskEntityMapper,
-            taskDisplayableMapper = taskDisplayableMapper
+            taskDisplayableMapper = taskDisplayableMapper,
+            dateFormatter = dateFormatter
         )
     }
 

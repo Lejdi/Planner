@@ -9,9 +9,9 @@ class DateFormatterImpl(
 ) : DateFormatter {
 
     private val cacheDateFormatter: SimpleDateFormat =
-        SimpleDateFormat(dateFormatProvider.CACHE_DATE_FORMAT, Locale.ROOT)
+        SimpleDateFormat(dateFormatProvider.CACHE_DATE_FORMAT, Locale.ENGLISH)
     private val displayableDateFormatter: SimpleDateFormat =
-        SimpleDateFormat(dateFormatProvider.DISPLAYABLE_DATE_FORMAT, Locale.ROOT)
+        SimpleDateFormat(dateFormatProvider.DISPLAYABLE_DATE_FORMAT, Locale.ENGLISH)
 
     override fun formatDateToDisplayable(input: Date?): String? {
         return input?.let { displayableDateFormatter.format(input) }
