@@ -84,7 +84,7 @@ class DashboardViewModel @Inject constructor(
                                 when(useCaseResult){
                                     is UseCaseResult.Error -> errorsQueue.addError(useCaseResult.error)
                                     is UseCaseResult.Success -> {
-                                        //TODO refresh dashboard if success
+                                        sendEvent(DashboardContract.Event.RefreshTasks)
                                     }
                                 }
                             }
