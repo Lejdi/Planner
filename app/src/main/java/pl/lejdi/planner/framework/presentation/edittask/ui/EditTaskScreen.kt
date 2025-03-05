@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -32,8 +34,11 @@ import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.model.Time
 import pl.lejdi.planner.business.utils.date.today
+import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerDatePicker
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerTimePicker
+import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.FormValidator
+import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.NotEmptyValidation
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskContract
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskViewModel
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskFormHelper
@@ -62,6 +67,8 @@ fun EditTaskScreen(
         }.collect()
     }
     Box {
+        val formValidator = remember { FormValidator() }
+
         var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }
         var taskDescription by remember { mutableStateOf(taskDetails?.description ?: "") }
         var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: Date()) }
@@ -105,21 +112,25 @@ fun EditTaskScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            OutlinedTextField(
+            FormTextField(
                 value = taskName,
                 onValueChange = {
                     taskName = it
                 },
-                label = { Text("enter task name") },
-                maxLines = 1
+                label = "enter task name",
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                validation = formValidator.addValidation(NotEmptyValidation)
             )
-            OutlinedTextField(
+            FormTextField(
                 value = taskDescription,
                 onValueChange = {
                     taskDescription = it
                 },
-                label = { Text("enter task description") },
-                minLines = 3
+                label = "enter task description",
+                minLines = 3,
             )
             RadioButtonsContainer(
                 selectedRadio = selectedRadio,
@@ -150,7 +161,6 @@ fun EditTaskScreen(
                             Text(labelText)
                         }
                     )
-
                     OutlinedTextField(
                         enabled = false,
                         modifier = Modifier
@@ -205,23 +215,25 @@ fun EditTaskScreen(
                 ) { Text("Delete") }
                 Button(
                     onClick = {
-                        val task = Task(
-                            id = taskDetails?.id ?: 0,
-                            name = taskName,
-                            description = taskDescription,
-                            startDate = selectedStartDate,
-                            endDate = selectedEndDate,
-                            hour = selectedTime,
-                            daysInterval = daysInterval.value ?: 0,
-                            asap = selectedRadio == EditTaskRadioButton.ASAP
-                        )
-                        val event = if(taskDetails == null){
-                            EditTaskContract.Event.AddTask(task)
+                        if(formValidator.validate()){
+                            val task = Task(
+                                id = taskDetails?.id ?: 0,
+                                name = taskName,
+                                description = taskDescription,
+                                startDate = selectedStartDate,
+                                endDate = selectedEndDate,
+                                hour = selectedTime,
+                                daysInterval = daysInterval.value ?: 0,
+                                asap = selectedRadio == EditTaskRadioButton.ASAP
+                            )
+                            val event = if(taskDetails == null){
+                                EditTaskContract.Event.AddTask(task)
+                            }
+                            else {
+                                EditTaskContract.Event.EditTask(task)
+                            }
+                            viewModel.sendEvent(event)
                         }
-                        else {
-                            EditTaskContract.Event.EditTask(task)
-                        }
-                        viewModel.sendEvent(event)
                     }
                 ) { Text("Save") }
             }
