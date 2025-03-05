@@ -28,6 +28,7 @@ object DashboardScreenRoute
 @Composable
 fun DashboardScreen(
     navigateToDetails: (Task?) -> Unit,
+    refreshScreen: Boolean,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.effect) {
@@ -38,6 +39,11 @@ fun DashboardScreen(
                 }
             }
         }.collect()
+    }
+    LaunchedEffect(refreshScreen) {
+        if(refreshScreen) {
+            viewModel.sendEvent(DashboardContract.Event.RefreshTasks)
+        }
     }
     Scaffold(
         floatingActionButton = {

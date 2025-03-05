@@ -49,14 +49,14 @@ data class EditTaskScreenRoute(
 @Composable
 fun EditTaskScreen(
     taskDetails: Task?,
-    navigateBack: () -> Unit,
+    navigateBack: (Boolean) -> Unit,
     viewModel: EditTaskViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.onEach { effect ->
             when (effect) {
                 is EditTaskContract.Effect.NavigateBack -> {
-                    navigateBack()
+                    navigateBack(true)
                 }
             }
         }.collect()
@@ -196,7 +196,7 @@ fun EditTaskScreen(
                 Button(
                     onClick = {
                         if(taskDetails == null){
-                            navigateBack()
+                            navigateBack(false)
                         }
                         else {
                             viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))

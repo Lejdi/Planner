@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.framework.presentation.common.navigation.NavTypes
+import pl.lejdi.planner.framework.presentation.common.navigation.REFRESH_DASHBOARD_KEY
 import pl.lejdi.planner.framework.presentation.common.ui.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
@@ -30,13 +31,14 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = DashboardScreenRoute,
                 ) {
-                    composable<DashboardScreenRoute> {
+                    composable<DashboardScreenRoute> { backStackEntry ->
                         DashboardScreen(
                             navigateToDetails = { task ->
                                 navController.navigate(
                                     EditTaskScreenRoute(task)
                                 )
-                            }
+                            },
+                            refreshScreen = backStackEntry.savedStateHandle.get<Boolean>(REFRESH_DASHBOARD_KEY) ?: false
                         )
                     }
                     composable<EditTaskScreenRoute>(
@@ -45,7 +47,10 @@ class MainActivity : ComponentActivity() {
                         val args = it.toRoute<EditTaskScreenRoute>()
                         EditTaskScreen(
                             taskDetails = args.taskDetails,
-                            navigateBack = {
+                            navigateBack = { refresh ->
+                                navController.previousBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.set(REFRESH_DASHBOARD_KEY, refresh)
                                 navController.navigateUp()
                             }
                         )
