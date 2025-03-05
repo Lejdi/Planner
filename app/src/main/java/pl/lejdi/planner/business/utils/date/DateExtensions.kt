@@ -20,3 +20,12 @@ fun Date.addDays(days: Int) : Date {
     calendar.add(Calendar.DATE, days)
     return calendar.time
 }
+
+fun today() : Date {
+    val calendar = Calendar.getInstance()
+    calendar[Calendar.HOUR_OF_DAY] = 0
+    calendar[Calendar.MINUTE] = 0
+    calendar[Calendar.SECOND] = 0
+    calendar[Calendar.MILLISECOND] = 0
+    return calendar.time
+}
