@@ -52,13 +52,11 @@ object UseCasesModule {
     @Provides
     fun provideDeleteTaskUseCase(
         tasksDataSource: TasksDataSource,
-        taskEntityMapper: TaskEntityMapper,
-        taskDisplayableMapper: TaskDisplayableMapper
+        taskEntityMapper: TaskEntityMapper
     ) : DeleteTask {
         return DeleteTask(
             tasksDataSource = tasksDataSource,
-            taskEntityMapper = taskEntityMapper,
-            taskDisplayableMapper = taskDisplayableMapper
+            taskEntityMapper = taskEntityMapper
         )
     }
 

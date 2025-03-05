@@ -7,6 +7,7 @@ import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.usecases.UseCase
 import pl.lejdi.planner.business.usecases.UseCaseResult
 import pl.lejdi.planner.business.utils.date.daysSinceDate
+import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.util.ErrorType
 import java.util.Date
@@ -43,7 +44,7 @@ class DeleteOutdatedTasks(
 
     private fun shouldTaskBeDeleted(task: Task) : Boolean{
         if(!task.asap){ //asap tasks always visible
-            val currentDate = Date()
+            val currentDate = today()
             val daysFromTheEnd = currentDate.daysSinceDate(task.endDate)
             val daysFromTheStart = currentDate.daysSinceDate(task.startDate)
             val oneTimeTaskInPastDate = task.daysInterval == 0 && daysFromTheStart > 0
@@ -57,13 +58,13 @@ class DeleteOutdatedTasks(
 
     private suspend fun shouldPerformCleanup() : Boolean {
         val lastCleanUpDate = lastCacheCleanupDataStoreInteractor.getData()
-        val currentDate = Date()
+        val currentDate = today()
         val daysFromTheLastCleanup = currentDate.daysSinceDate(lastCleanUpDate)
         return daysFromTheLastCleanup > 7
     }
 
     private suspend fun updateCleanupDate() {
-        val currentDate = Date()
+        val currentDate = today()
         lastCacheCleanupDataStoreInteractor.setData(currentDate)
     }
 }

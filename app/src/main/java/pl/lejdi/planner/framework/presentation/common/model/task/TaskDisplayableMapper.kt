@@ -15,7 +15,7 @@ class TaskDisplayableMapper(
             startDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.startDate)!!, // surely not null - startDate cannot be null in framework model
             endDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.endDate),
             daysInterval = frameworkModel.daysInterval.toInt(),
-            hour = frameworkModel.hour,
+            hour = dateFormatter.timeFromStringFormat(frameworkModel.hour),
             asap = frameworkModel.asap
         )
     }
@@ -28,7 +28,7 @@ class TaskDisplayableMapper(
             startDate = dateFormatter.formatDateToDisplayable(businessModel.startDate)!!, // surely not null - startDate cannot be null in business model
             endDate = dateFormatter.formatDateToDisplayable(businessModel.endDate),
             daysInterval = businessModel.daysInterval.toString(),
-            hour = businessModel.hour,
+            hour = dateFormatter.formatTimeToString(businessModel.hour),
             asap = businessModel.asap,
             priority = calculatePriority(businessModel)
         )

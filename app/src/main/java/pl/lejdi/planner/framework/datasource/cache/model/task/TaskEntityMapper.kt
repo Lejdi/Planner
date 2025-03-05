@@ -15,7 +15,7 @@ class TaskEntityMapper(
             startDate = dateFormatter.dateFromCacheFormat(frameworkModel.startDate)!!, // surely not null - startDate cannot be null in framework model
             endDate = dateFormatter.dateFromCacheFormat(frameworkModel.endDate),
             daysInterval = frameworkModel.daysInterval,
-            hour = frameworkModel.hour,
+            hour = dateFormatter.timeFromStringFormat(frameworkModel.hour),
             asap = frameworkModel.asap
         )
     }
@@ -28,7 +28,7 @@ class TaskEntityMapper(
             startDate = dateFormatter.formatDateForCache(businessModel.startDate)!!, // surely not null - startDate cannot be null in business model
             endDate = dateFormatter.formatDateForCache(businessModel.endDate),
             daysInterval = businessModel.daysInterval,
-            hour = businessModel.hour,
+            hour = dateFormatter.formatTimeToString(businessModel.hour),
             asap = businessModel.asap
         )
     }

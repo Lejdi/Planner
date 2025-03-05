@@ -20,9 +20,17 @@ data class Task(
     val startDate: Date,
     @Serializable(with = DateSerializer::class)
     val endDate: Date?,
-    val hour: String?,
+    val hour: Time?,
     val daysInterval: Int,
     val asap: Boolean,
+) : Parcelable
+
+
+@Parcelize
+@Serializable
+data class Time(
+    val hour: Int,
+    val minute: Int
 ) : Parcelable
 
 
