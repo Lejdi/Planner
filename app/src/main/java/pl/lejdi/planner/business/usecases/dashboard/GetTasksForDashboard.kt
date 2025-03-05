@@ -12,6 +12,7 @@ import pl.lejdi.planner.business.utils.date.isToday
 import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.SingleDayDataDTO
+import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 import pl.lejdi.planner.framework.presentation.util.ErrorType
 import java.util.Date
@@ -42,8 +43,10 @@ class GetTasksForDashboard(
                     tasksList
                 )
             )
+            val sortedTasks = tasksForDate
+                .sortedWith(compareBy<TaskDisplayable> { it.priority }.thenBy { it.hour } )
             result.add(
-                SingleDayDataDTO(dateString, tasksForDate)
+                SingleDayDataDTO(dateString, sortedTasks)
             )
         }
 
