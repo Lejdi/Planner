@@ -15,6 +15,7 @@ class DashboardContract  {
         data class CompleteButtonClicked(val task: TaskDisplayable) : Event()
         data object RefreshTasks : Event()
         data object AddButtonClicked: Event()
+        data object DeleteOutdatedTasks: Event()
     }
 
     data class State(

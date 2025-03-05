@@ -16,7 +16,7 @@ class DashboardViewModel @Inject constructor(
 ) : BaseViewModel<DashboardContract.Event, DashboardContract.State, DashboardContract.Effect>() {
 
     init {
-        sendEvent(DashboardContract.Event.RefreshTasks)
+        sendEvent(DashboardContract.Event.DeleteOutdatedTasks)
     }
 
     override fun setInitialState() : DashboardContract.State{
@@ -89,6 +89,21 @@ class DashboardViewModel @Inject constructor(
                                 }
                             }
                         }
+                    }
+                )
+            }
+
+            DashboardContract.Event.DeleteOutdatedTasks -> {
+                setState {
+                    copy(
+                        isLoading = true
+                    )
+                }
+                dashboardUseCases.deleteOutdatedTasks(
+                    params = Unit,
+                    scope = viewModelScope,
+                    onResult = { _ ->
+                        sendEvent(DashboardContract.Event.RefreshTasks)
                     }
                 )
             }
