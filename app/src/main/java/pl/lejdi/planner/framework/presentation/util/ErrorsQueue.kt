@@ -1,13 +1,24 @@
 package pl.lejdi.planner.framework.presentation.util
 
-class ErrorsQueue {
-    val errors = mutableListOf<ErrorType>()
+import androidx.compose.runtime.mutableStateOf
 
-    fun getError(): ErrorType{
-        return errors.removeAt(0)
+class ErrorsQueue {
+    private val errors = mutableStateOf(listOf<ErrorType>())
+
+    fun getError(): ErrorType?{
+        return errors.value.getOrNull(0)
+    }
+
+    fun removeError() {
+        val temp = mutableListOf<ErrorType>()
+        temp.addAll(errors.value)
+        if(temp.isNotEmpty()) temp.removeAt(0)
+        errors.value = temp
     }
 
     fun addError(error: ErrorType){
-        errors.add(error)
+        val newErrorsList = errors.value.toMutableList()
+        newErrorsList.add(error)
+        errors.value = newErrorsList
     }
 }

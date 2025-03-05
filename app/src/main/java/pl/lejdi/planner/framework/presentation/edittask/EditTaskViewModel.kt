@@ -13,9 +13,8 @@ class EditTaskViewModel @Inject constructor(
     val editTaskUseCases: EditTaskUseCases
 ) : BaseViewModel<EditTaskContract.Event, EditTaskContract.State, EditTaskContract.Effect>() {
     override fun setInitialState() = EditTaskContract.State(
-        isLoading = true,
-        errors = errorsQueue,
-        taskDetails = null
+        isLoading = false,
+        errors = errorsQueue
     )
 
     override fun sendEvent(event: EditTaskContract.Event) {
@@ -58,6 +57,11 @@ class EditTaskViewModel @Inject constructor(
     }
 
     private fun handleEditTaskResult(result: Result<UseCaseResult<Unit>>) {
+        setState {
+            copy(
+                isLoading = false
+            )
+        }
         if (result.isFailure) errorsQueue.addError(ErrorType.Unknown)
         else {
             result.getOrNull()?.let { useCaseResult ->

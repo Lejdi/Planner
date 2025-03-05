@@ -17,7 +17,6 @@ class EditTaskContract  {
     data class State(
         var isLoading: Boolean,
         var errors: ErrorsQueue,
-        var taskDetails: Task?
     ) : ViewState
 
     sealed class Effect : ViewEffect {

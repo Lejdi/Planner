@@ -1,4 +1,4 @@
-package pl.lejdi.planner.framework.presentation.common.ui
+package pl.lejdi.planner.framework.presentation.common.ui.styling
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

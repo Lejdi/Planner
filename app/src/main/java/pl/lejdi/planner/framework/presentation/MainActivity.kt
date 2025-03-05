@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.framework.presentation.common.navigation.NavTypes
 import pl.lejdi.planner.framework.presentation.common.navigation.REFRESH_DASHBOARD_KEY
-import pl.lejdi.planner.framework.presentation.common.ui.PlannerTheme
+import pl.lejdi.planner.framework.presentation.common.ui.styling.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreen

@@ -39,6 +39,11 @@ class DashboardViewModel @Inject constructor(
                     params = Unit,
                     scope = viewModelScope,
                     onResult = { result ->
+                        setState {
+                            copy(
+                                isLoading = false,
+                            )
+                        }
                         if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
                         else{
                             result.getOrNull()?.let { useCaseResult ->
@@ -47,7 +52,6 @@ class DashboardViewModel @Inject constructor(
                                     is UseCaseResult.Success -> {
                                         setState {
                                             copy(
-                                                isLoading = false,
                                                 daysTasksMap = useCaseResult.data
                                             )
                                         }
@@ -78,6 +82,11 @@ class DashboardViewModel @Inject constructor(
                     params = event.task,
                     scope = viewModelScope,
                     onResult = { result ->
+                        setState {
+                            copy(
+                                isLoading = false,
+                            )
+                        }
                         if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
                         else{
                             result.getOrNull()?.let { useCaseResult ->
@@ -103,6 +112,11 @@ class DashboardViewModel @Inject constructor(
                     params = Unit,
                     scope = viewModelScope,
                     onResult = { _ ->
+                        setState {
+                            copy(
+                                isLoading = false,
+                            )
+                        }
                         sendEvent(DashboardContract.Event.RefreshTasks)
                     }
                 )

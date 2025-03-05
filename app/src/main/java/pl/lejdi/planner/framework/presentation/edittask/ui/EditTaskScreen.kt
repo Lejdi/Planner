@@ -34,6 +34,7 @@ import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.model.Time
 import pl.lejdi.planner.business.utils.date.today
+import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerDatePicker
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerTimePicker
@@ -56,6 +57,9 @@ fun EditTaskScreen(
     taskDetails: Task?,
     navigateBack: (Boolean) -> Unit,
     viewModel: EditTaskViewModel = hiltViewModel()
+) = BaseScreen(
+    displayProgressBar = viewModel.viewState.value.isLoading,
+    errorsQueue = viewModel.errorsQueue
 ) {
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.onEach { effect ->

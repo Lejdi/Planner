@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardContract
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
 
@@ -30,6 +31,9 @@ fun DashboardScreen(
     navigateToDetails: (Task?) -> Unit,
     refreshScreen: Boolean,
     viewModel: DashboardViewModel = hiltViewModel()
+) = BaseScreen(
+    displayProgressBar = viewModel.viewState.value.isLoading,
+    errorsQueue = viewModel.errorsQueue
 ) {
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.onEach { effect ->
