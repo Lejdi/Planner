@@ -70,7 +70,7 @@ class GetTasksForDashboard(
                 task.daysInterval > 0
                 && task.startDate <= date
                 && daysFromTheStart % task.daysInterval == 0
-                && daysSinceTheEnd < 0
+                && daysSinceTheEnd <= 0
             ) {
                 filteredTasks.add(task)
                 continue
