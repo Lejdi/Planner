@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                         EditTaskScreen(
                             taskDetails = args.taskDetails,
                             navigateBack = {
-                                navController.popBackStack()
+                                navController.navigateUp()
                             }
                         )
                     }

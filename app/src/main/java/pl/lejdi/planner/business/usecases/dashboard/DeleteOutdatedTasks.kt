@@ -10,7 +10,6 @@ import pl.lejdi.planner.business.utils.date.daysSinceDate
 import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.util.ErrorType
-import java.util.Date
 
 class DeleteOutdatedTasks(
     private val tasksDataSource: TasksDataSource,

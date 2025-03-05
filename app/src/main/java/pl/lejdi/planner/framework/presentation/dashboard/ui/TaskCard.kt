@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +23,17 @@ fun TaskCard(
     onEditClick: (TaskDisplayable) -> Unit,
     onCompleteClick: (TaskDisplayable) -> Unit
 ) {
-    val expanded = remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize(0.9f)
             .background(color = Color.Green)
-            .clickable { expanded.value = true },
+            .clickable { expanded = true },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(task.name)
         task.description?.let { Text(it) }
-        if(expanded.value){
+        if(expanded){
             Row {
                 Button(
                     onClick = {

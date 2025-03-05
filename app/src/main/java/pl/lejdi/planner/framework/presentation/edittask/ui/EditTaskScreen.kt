@@ -18,8 +18,10 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -60,27 +62,27 @@ fun EditTaskScreen(
         }.collect()
     }
     Box {
-        val taskName = remember { mutableStateOf(taskDetails?.name ?: "") }
-        val taskDescription = remember { mutableStateOf(taskDetails?.description ?: "") }
-        val selectedStartDate = remember { mutableStateOf(taskDetails?.startDate ?: Date()) }
-        val selectedEndDate = remember { mutableStateOf(taskDetails?.endDate) }
-        val selectedTime = remember { mutableStateOf(taskDetails?.hour) }
+        var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }
+        var taskDescription by remember { mutableStateOf(taskDetails?.description ?: "") }
+        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: Date()) }
+        var selectedEndDate by remember { mutableStateOf(taskDetails?.endDate) }
+        var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
         val daysInterval = remember { mutableStateOf(taskDetails?.daysInterval) }
 
         val taskSelectedRadio = EditTaskFormHelper.getSelectedRadioForTask(taskDetails)
         val (selectedRadio, onRadioSelect) = remember { mutableStateOf(taskSelectedRadio) }
 
-        val showStartDatePickerDialog = remember { mutableStateOf(false) }
+        var showStartDatePickerDialog by remember { mutableStateOf(false) }
         val startDatePickerState = rememberDatePickerState().apply {
             val initialTime = taskDetails?.startDate ?: today()
             selectedDateMillis = initialTime.time
         }
 
-        val showEndDatePickerDialog = remember { mutableStateOf(false) }
+        var showEndDatePickerDialog by remember { mutableStateOf(false) }
         val endDatePickerState = rememberDatePickerState(
             selectableDates = object : SelectableDates{
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                    return utcTimeMillis > selectedStartDate.value.time
+                    return utcTimeMillis > selectedStartDate.time
                 }
             }
         ).apply {
@@ -88,7 +90,7 @@ fun EditTaskScreen(
             selectedDateMillis = initialTime.time
         }
 
-        val showTimePickerDialog = remember { mutableStateOf(false) }
+        var showTimePickerDialog by remember { mutableStateOf(false) }
         val timePickerState = rememberTimePickerState(
             is24Hour = true
         ).apply {
@@ -104,17 +106,17 @@ fun EditTaskScreen(
                 .padding(16.dp)
         ) {
             OutlinedTextField(
-                value = taskName.value,
+                value = taskName,
                 onValueChange = {
-                    taskName.value = it
+                    taskName = it
                 },
                 label = { Text("enter task name") },
                 maxLines = 1
             )
             OutlinedTextField(
-                value = taskDescription.value,
+                value = taskDescription,
                 onValueChange = {
-                    taskDescription.value = it
+                    taskDescription = it
                 },
                 label = { Text("enter task description") },
                 minLines = 3
@@ -134,11 +136,11 @@ fun EditTaskScreen(
                         modifier = Modifier
                             .width(150.dp)
                             .clickable {
-                                showStartDatePickerDialog.value = true
+                                showStartDatePickerDialog = true
                             },
                         value = EditTaskFormHelper.formatDateForDisplay(
                             LocalContext.current,
-                            selectedStartDate.value
+                            selectedStartDate
                         ),
                         onValueChange = {},
                         label = {
@@ -154,11 +156,11 @@ fun EditTaskScreen(
                         modifier = Modifier
                             .width(100.dp)
                             .clickable {
-                                showTimePickerDialog.value = true
+                                showTimePickerDialog = true
                             },
                         value = EditTaskFormHelper.formatHoursForDisplay(
                             LocalContext.current,
-                            selectedTime.value
+                            selectedTime
                         ),
                         onValueChange = {},
                         label = {
@@ -174,11 +176,11 @@ fun EditTaskScreen(
                     modifier = Modifier
                         .width(150.dp)
                         .clickable {
-                            showEndDatePickerDialog.value = true
+                            showEndDatePickerDialog = true
                         },
                     value = EditTaskFormHelper.formatDateForDisplay(
                         LocalContext.current,
-                        selectedEndDate.value
+                        selectedEndDate
                     ),
                     onValueChange = {},
                     label = {
@@ -205,11 +207,11 @@ fun EditTaskScreen(
                     onClick = {
                         val task = Task(
                             id = taskDetails?.id ?: 0,
-                            name = taskName.value,
-                            description = taskDescription.value,
-                            startDate = selectedStartDate.value,
-                            endDate = selectedEndDate.value,
-                            hour = selectedTime.value,
+                            name = taskName,
+                            description = taskDescription,
+                            startDate = selectedStartDate,
+                            endDate = selectedEndDate,
+                            hour = selectedTime,
                             daysInterval = daysInterval.value ?: 0,
                             asap = selectedRadio == EditTaskRadioButton.ASAP
                         )
@@ -225,36 +227,36 @@ fun EditTaskScreen(
             }
         }
 
-        if (showStartDatePickerDialog.value) {
+        if (showStartDatePickerDialog) {
             PlannerDatePicker(
                 dismiss = {
-                    showStartDatePickerDialog.value = false
+                    showStartDatePickerDialog = false
                 },
                 applyDate = {
-                    selectedStartDate.value =
+                    selectedStartDate =
                         startDatePickerState.selectedDateMillis?.let { Date(it) } ?: today()
                 },
                 state = startDatePickerState
             )
         }
-        if (showEndDatePickerDialog.value) {
+        if (showEndDatePickerDialog) {
             PlannerDatePicker(
                 dismiss = {
-                    showEndDatePickerDialog.value = false
+                    showEndDatePickerDialog = false
                 },
                 applyDate = {
-                    selectedEndDate.value = endDatePickerState.selectedDateMillis?.let { Date(it) }
+                    selectedEndDate = endDatePickerState.selectedDateMillis?.let { Date(it) }
                 },
                 state = endDatePickerState
             )
         }
-        if (showTimePickerDialog.value) {
+        if (showTimePickerDialog) {
             PlannerTimePicker(
                 dismiss = {
-                    showTimePickerDialog.value = false
+                    showTimePickerDialog = false
                 },
                 applyTime = {
-                    selectedTime.value = Time(timePickerState.hour, timePickerState.minute)
+                    selectedTime = Time(timePickerState.hour, timePickerState.minute)
                 },
                 state = timePickerState
             )
