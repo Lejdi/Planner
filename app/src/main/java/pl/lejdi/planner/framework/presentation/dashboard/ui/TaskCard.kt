@@ -21,10 +21,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,10 +29,12 @@ import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 @Composable
 fun TaskCard(
     task: TaskDisplayable,
+    expandedTaskId: Int?,
     onEditClick: (TaskDisplayable) -> Unit,
     onCompleteClick: (TaskDisplayable) -> Unit,
+    onTaskClick: (TaskDisplayable) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    val shouldBeExpanded = task.id == expandedTaskId
     Card(
         colors = CardDefaults.cardColors().copy(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -47,13 +45,13 @@ fun TaskCard(
                 interactionSource = null,
                 indication = null,
                 onClick = {
-                    expanded = !expanded
+                    onTaskClick(task)
                 }
             ),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(if(expanded) 1.0f else 0.9f)
+                .fillMaxSize(if(shouldBeExpanded) 1.0f else 0.9f)
                 .padding(12.dp),
         ) {
             Row(
@@ -82,7 +80,7 @@ fun TaskCard(
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
-            if (expanded) {
+            if (shouldBeExpanded) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

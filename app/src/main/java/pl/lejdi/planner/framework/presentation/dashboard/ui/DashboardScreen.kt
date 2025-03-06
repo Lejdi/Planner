@@ -86,7 +86,8 @@ fun DashboardScreen(
                     },
                     onCompleteClick = { clickedTask ->
                         viewModel.sendEvent(DashboardContract.Event.CompleteButtonClicked(clickedTask))
-                    }
+                    },
+                    selectedPage = pagerState.currentPage
                 )
             }
         }

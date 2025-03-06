@@ -10,6 +10,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,8 +26,15 @@ fun SingleDayView(
     date: String,
     tasks: List<TaskDisplayable>,
     onEditClick: (TaskDisplayable) -> Unit,
-    onCompleteClick: (TaskDisplayable) -> Unit
+    onCompleteClick: (TaskDisplayable) -> Unit,
+    selectedPage: Int,
 ) {
+    var expandedTask by remember { mutableStateOf<TaskDisplayable?>(null) }
+    //collapse expanded tasks on page changed
+    LaunchedEffect(selectedPage) {
+        expandedTask = null
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -45,7 +57,14 @@ fun SingleDayView(
                 TaskCard(
                     task = task,
                     onEditClick = onEditClick,
-                    onCompleteClick = onCompleteClick
+                    onCompleteClick = {
+                        expandedTask = null
+                        onCompleteClick(it)
+                    },
+                    expandedTaskId = expandedTask?.id,
+                    onTaskClick = {
+                        expandedTask = if(expandedTask == it) null else it
+                    }
                 )
             }
         }
