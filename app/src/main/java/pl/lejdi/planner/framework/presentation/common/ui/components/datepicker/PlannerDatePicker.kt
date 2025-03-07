@@ -1,4 +1,4 @@
-package pl.lejdi.planner.framework.presentation.common.ui.components
+package pl.lejdi.planner.framework.presentation.common.ui.components.datepicker
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog

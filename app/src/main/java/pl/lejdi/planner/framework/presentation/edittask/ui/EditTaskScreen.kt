@@ -8,17 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,15 +30,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
-import pl.lejdi.planner.business.data.model.Time
 import pl.lejdi.planner.business.utils.date.daysSinceDate
 import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
-import pl.lejdi.planner.framework.presentation.common.ui.components.DatePickerField
+import pl.lejdi.planner.framework.presentation.common.ui.components.datepicker.DatePickerField
 import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
-import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerDatePicker
-import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerTimePicker
-import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
+import pl.lejdi.planner.framework.presentation.common.ui.components.timepicker.TimePickerField
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.FormValidator
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.NotEmptyValidation
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskContract
@@ -85,18 +78,8 @@ fun EditTaskScreen(
         var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
         val daysInterval = remember { mutableStateOf(taskDetails?.daysInterval) }
 
-        val taskSelectedRadio = EditTaskFormHelper.getSelectedRadioForTask(taskDetails)
-        val (selectedRadio, onRadioSelect) = remember { mutableStateOf(taskSelectedRadio) }
-
-        var showTimePickerDialog by remember { mutableStateOf(false) }
-        val timePickerState = rememberTimePickerState(
-            is24Hour = true
-        ).apply {
-            taskDetails?.hour?.let {
-                hour = it.hour
-                minute = it.minute
-            }
-        }
+        val initialSelectedRadio = EditTaskFormHelper.getSelectedRadioForTask(taskDetails)
+        val (selectedRadio, onRadioSelect) = remember { mutableStateOf(initialSelectedRadio) }
 
         Scaffold { contentPadding ->
             Column(
@@ -154,21 +137,12 @@ fun EditTaskScreen(
                             },
                             initialDate = selectedStartDate,
                         )
-                        OutlinedTextField(
-                            enabled = false,
-                            modifier = Modifier
-                                .width(100.dp)
-                                .clickableWithoutRipple {
-                                    showTimePickerDialog = true
-                                },
-                            value = EditTaskFormHelper.formatHoursForDisplay(
-                                LocalContext.current,
-                                selectedTime
-                            ),
-                            onValueChange = {},
-                            label = {
-                                Text("Hour")
-                            }
+                        TimePickerField(
+                            initialTime = selectedTime,
+                            onTimeSelected = {
+                                selectedTime = it
+                            },
+                            label = "Hour"
                         )
                     }
                 }
@@ -227,17 +201,6 @@ fun EditTaskScreen(
                     ) { Text("Save") }
                 }
             }
-        }
-        if (showTimePickerDialog) {
-            PlannerTimePicker(
-                dismiss = {
-                    showTimePickerDialog = false
-                },
-                applyTime = {
-                    selectedTime = Time(timePickerState.hour, timePickerState.minute)
-                },
-                state = timePickerState
-            )
         }
     }
 }
