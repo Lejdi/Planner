@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -94,81 +96,90 @@ fun EditTaskScreen(
                     .padding(contentPadding)
                     .padding(16.dp)
             ) {
-                FormTextField(
-                    value = taskName,
-                    onValueChange = {
-                        taskName = it
-                    },
-                    label = "enter task name",
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    validation = formValidator.addValidation(NotEmptyValidation)
-                )
-                FormTextField(
-                    value = taskDescription,
-                    onValueChange = {
-                        taskDescription = it
-                    },
-                    label = "enter task description",
-                    minLines = 3,
-                )
-                RadioButtonsContainer(
-                    selectedRadio = selectedRadio,
-                    onRadioSelect = onRadioSelect,
-                    daysInterval = daysInterval
-                )
-                if (selectedRadio != EditTaskRadioButton.ASAP) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1.0f)
+                ) {
+                    FormTextField(
+                        value = taskName,
+                        onValueChange = {
+                            taskName = it
+                        },
+                        label = "Task name",
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        validation = formValidator.addValidation(NotEmptyValidation)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    FormTextField(
+                        value = taskDescription,
+                        onValueChange = {
+                            taskDescription = it
+                        },
+                        label = "Task description",
+                        minLines = 3,
+                    )
+                    RadioButtonsContainer(
+                        selectedRadio = selectedRadio,
+                        onRadioSelect = onRadioSelect,
+                        daysInterval = daysInterval
+                    )
+                    if (selectedRadio != EditTaskRadioButton.ASAP) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            DatePickerField(
+                                value = EditTaskFormHelper.formatDateForDisplay(
+                                    LocalContext.current,
+                                    selectedStartDate
+                                ),
+                                label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date" else "Start Date",
+                                onDateSelected = {
+                                    selectedStartDate = it ?: today()
+                                    selectedEndDate?.let { endDate ->
+                                        if(selectedStartDate.daysSinceDate(endDate) < 0){
+                                            selectedEndDate = selectedStartDate
+                                        }
+                                    }
+                                },
+                                initialDate = selectedStartDate,
+                            )
+                            TimePickerField(
+                                initialTime = selectedTime,
+                                onTimeSelected = {
+                                    selectedTime = it
+                                },
+                                label = "Hour"
+                            )
+                        }
+                    }
+                    if (selectedRadio == EditTaskRadioButton.PERIODIC) {
                         DatePickerField(
                             value = EditTaskFormHelper.formatDateForDisplay(
                                 LocalContext.current,
-                                selectedStartDate
+                                selectedEndDate
                             ),
-                            label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date" else "Start Date",
+                            label = "End date",
                             onDateSelected = {
-                                selectedStartDate = it ?: today()
-                                selectedEndDate?.let { endDate ->
-                                    if(selectedStartDate.daysSinceDate(endDate) < 0){
-                                        selectedEndDate = selectedStartDate
-                                    }
+                                selectedEndDate = it
+                            },
+                            initialDate = selectedEndDate,
+                            selectableDates = object : SelectableDates {
+                                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                                    return utcTimeMillis > selectedStartDate.time
                                 }
-                            },
-                            initialDate = selectedStartDate,
-                        )
-                        TimePickerField(
-                            initialTime = selectedTime,
-                            onTimeSelected = {
-                                selectedTime = it
-                            },
-                            label = "Hour"
+                            }
                         )
                     }
                 }
-                if (selectedRadio == EditTaskRadioButton.PERIODIC) {
-                    DatePickerField(
-                        value = EditTaskFormHelper.formatDateForDisplay(
-                            LocalContext.current,
-                            selectedEndDate
-                        ),
-                        label = "End date",
-                        onDateSelected = {
-                            selectedEndDate = it
-                        },
-                        initialDate = selectedEndDate,
-                        selectableDates = object : SelectableDates {
-                            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                                return utcTimeMillis > selectedStartDate.time
-                            }
-                        }
-                    )
-                }
+
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(

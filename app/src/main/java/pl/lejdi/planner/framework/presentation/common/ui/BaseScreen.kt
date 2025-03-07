@@ -44,8 +44,8 @@ fun BaseScreen(
         }
         errorsQueue.getError()?.let { error ->
             AlertDialog(
-                icon = {
-                    Icon(Icons.Filled.Warning, null)
+                title = {
+                    Text(text = "Error")
                 },
                 text = {
                     Text(text = error.name)

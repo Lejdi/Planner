@@ -2,6 +2,7 @@ package pl.lejdi.planner.framework.presentation.edittask.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,7 +30,10 @@ fun RadioButtonsContainer(
     onRadioSelect: (EditTaskRadioButton) -> Unit,
     daysInterval: MutableState<Int?>
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(top = 8.dp)
+    ) {
         EditTaskRadioButton.entries.forEach { radioButtonOption ->
             val radioSelected = (radioButtonOption == selectedRadio)
             Column {
@@ -40,8 +45,8 @@ fun RadioButtonsContainer(
                             onClick = {
                                 onRadioSelect(radioButtonOption)
                             }
-                        )
-                        .padding(horizontal = 16.dp)
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
                         selected = radioSelected,
@@ -49,7 +54,7 @@ fun RadioButtonsContainer(
                     )
                     Text(
                         text = radioButtonOption.description,
-                        modifier = Modifier.padding(start = 16.dp)
+                        modifier = Modifier.padding(start = 8.dp)
                     )
                 }
                 if(radioSelected){
@@ -74,8 +79,13 @@ fun AdditionalRadioComponents(
                 val initialState = daysInterval.value?.toString().orEmpty()
                 mutableStateOf(initialState)
             }
-            Row{
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+            ){
                 Text("Repeat every")
+                Spacer(modifier = Modifier.width(4.dp))
                 OutlinedTextField(
                     value = textFieldState,
                     onValueChange = {
@@ -88,6 +98,7 @@ fun AdditionalRadioComponents(
                     ),
                     modifier = Modifier.width(64.dp)
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text("days")
             }
 
