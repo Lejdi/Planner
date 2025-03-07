@@ -1,5 +1,7 @@
 package pl.lejdi.planner.framework.presentation.common.ui.utils.validation
 
+import pl.lejdi.planner.R
+
 abstract class Validation {
     private var isValid: Boolean = true
     private lateinit var onValidationChangeListener: (Boolean) -> Unit
@@ -18,7 +20,7 @@ abstract class Validation {
         onValidationChangeListener = onChange
     }
 
-    open fun getErrorMessage() : String {
-        return "Invalid value"
+    open fun getErrorMessage() : Int {
+        return R.string.validation_default_error_message
     }
 }

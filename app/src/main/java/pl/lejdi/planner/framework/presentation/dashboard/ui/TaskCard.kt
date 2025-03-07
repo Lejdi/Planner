@@ -20,8 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import pl.lejdi.planner.R
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 
@@ -88,7 +90,7 @@ fun TaskCard(
                             onEditClick(task)
                         }
                     ) {
-                        Text("Edit")
+                        Text(stringResource(R.string.edit_button))
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(Icons.Outlined.Edit, null)
                     }
@@ -97,7 +99,7 @@ fun TaskCard(
                             onCompleteClick(task)
                         }
                     ) {
-                        Text("Complete")
+                        Text(stringResource(R.string.complete_button))
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(Icons.Outlined.CheckCircle, null)
                     }

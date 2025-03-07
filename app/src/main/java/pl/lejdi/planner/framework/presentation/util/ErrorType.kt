@@ -1,6 +1,8 @@
 package pl.lejdi.planner.framework.presentation.util
 
-enum class ErrorType(details: String) {
-    CacheError("Cache error TODO message"),
-    Unknown("Unknown error")
+import pl.lejdi.planner.R
+
+enum class ErrorType(val details: Int) {
+    CacheError(R.string.error_type_cache),
+    Unknown(R.string.error_type_unknown)
 }

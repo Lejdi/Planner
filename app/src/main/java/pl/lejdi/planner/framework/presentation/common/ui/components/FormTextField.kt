@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.Validation
 
@@ -55,7 +56,7 @@ fun FormTextField(
         if(isError){
             validation?.getErrorMessage()?.let {
                 Text(
-                    text = it,
+                    text = stringResource(it),
                     style = LocalTextStyle.current.copy(
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.error

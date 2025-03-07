@@ -19,16 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import pl.lejdi.planner.R
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskRadioButton
 
 @Composable
 fun RadioButtonsContainer(
     selectedRadio: EditTaskRadioButton,
     onRadioSelect: (EditTaskRadioButton) -> Unit,
-    daysInterval: MutableState<Int?>
+    daysInterval: MutableState<Int?>,
 ) {
     Column(
         modifier = Modifier
@@ -53,11 +55,11 @@ fun RadioButtonsContainer(
                         onClick = { onRadioSelect(radioButtonOption) }
                     )
                     Text(
-                        text = radioButtonOption.description,
+                        text = stringResource(radioButtonOption.description),
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
-                if(radioSelected){
+                if (radioSelected) {
                     AdditionalRadioComponents(
                         radioButton = radioButtonOption,
                         daysInterval = daysInterval
@@ -71,9 +73,9 @@ fun RadioButtonsContainer(
 @Composable
 fun AdditionalRadioComponents(
     radioButton: EditTaskRadioButton,
-    daysInterval: MutableState<Int?>
+    daysInterval: MutableState<Int?>,
 ) {
-    when(radioButton){
+    when (radioButton) {
         EditTaskRadioButton.PERIODIC -> {
             var textFieldState by remember {
                 val initialState = daysInterval.value?.toString().orEmpty()
@@ -83,8 +85,8 @@ fun AdditionalRadioComponents(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(bottom = 4.dp)
-            ){
-                Text("Repeat every")
+            ) {
+                Text(stringResource(R.string.repeat_every))
                 Spacer(modifier = Modifier.width(4.dp))
                 OutlinedTextField(
                     value = textFieldState,
@@ -99,9 +101,8 @@ fun AdditionalRadioComponents(
                     modifier = Modifier.width(64.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("days")
+                Text(stringResource(R.string.days))
             }
-
         }
         else -> {}
     }

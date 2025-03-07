@@ -1,5 +1,7 @@
 package pl.lejdi.planner.framework.presentation.common.ui.utils.validation
 
+import pl.lejdi.planner.R
+
 object NotEmptyValidation : Validation() {
 
     override fun validation(): Boolean {
@@ -15,7 +17,5 @@ object NotEmptyValidation : Validation() {
         fieldToValidate = fieldValue
     }
 
-    override fun getErrorMessage(): String {
-        return "Field cannot be empty"
-    }
+    override fun getErrorMessage() = R.string.validation_non_empty_error_message
 }

@@ -7,6 +7,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.TimePicker
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import pl.lejdi.planner.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,7 +21,7 @@ fun PlannerTimePicker(
         onDismissRequest = dismiss,
         dismissButton = {
             TextButton(onClick = { dismiss() }) {
-                Text("Dismiss")
+                Text(stringResource(R.string.cancel_button))
             }
         },
         confirmButton = {
@@ -29,7 +31,7 @@ fun PlannerTimePicker(
                     dismiss()
                 }
             ) {
-                Text("OK")
+                Text(stringResource(R.string.confirm_button))
             }
         },
         text = {

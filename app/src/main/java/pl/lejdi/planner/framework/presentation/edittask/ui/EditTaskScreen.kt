@@ -25,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
+import pl.lejdi.planner.R
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.utils.date.daysSinceDate
 import pl.lejdi.planner.business.utils.date.today
@@ -105,7 +107,7 @@ fun EditTaskScreen(
                         onValueChange = {
                             taskName = it
                         },
-                        label = "Task name",
+                        label = stringResource(R.string.task_name_label),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done
@@ -118,7 +120,7 @@ fun EditTaskScreen(
                         onValueChange = {
                             taskDescription = it
                         },
-                        label = "Task description",
+                        label = stringResource(R.string.task_description_label),
                         minLines = 3,
                     )
                     RadioButtonsContainer(
@@ -136,7 +138,7 @@ fun EditTaskScreen(
                                     LocalContext.current,
                                     selectedStartDate
                                 ),
-                                label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date" else "Start Date",
+                                label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) stringResource(R.string.date_label) else stringResource(R.string.start_date_label),
                                 onDateSelected = {
                                     selectedStartDate = it ?: today()
                                     selectedEndDate?.let { endDate ->
@@ -152,7 +154,7 @@ fun EditTaskScreen(
                                 onTimeSelected = {
                                     selectedTime = it
                                 },
-                                label = "Hour"
+                                label = stringResource(R.string.hour_label)
                             )
                         }
                     }
@@ -162,7 +164,7 @@ fun EditTaskScreen(
                                 LocalContext.current,
                                 selectedEndDate
                             ),
-                            label = "End date",
+                            label = stringResource(R.string.end_date_label),
                             onDateSelected = {
                                 selectedEndDate = it
                             },
@@ -190,7 +192,7 @@ fun EditTaskScreen(
                                 viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))
                             }
                         }
-                    ) { Text("Delete") }
+                    ) { Text(stringResource(R.string.delete_button)) }
                     Button(
                         onClick = {
                             if (formValidator.validate()) {
@@ -212,7 +214,7 @@ fun EditTaskScreen(
                                 viewModel.sendEvent(event)
                             }
                         }
-                    ) { Text("Save") }
+                    ) { Text(stringResource(R.string.save_button)) }
                 }
             }
         }
