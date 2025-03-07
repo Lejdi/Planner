@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
+import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 
 @Composable
 fun TaskCard(
@@ -41,17 +42,13 @@ fun TaskCard(
         ),
         modifier = Modifier
             .animateContentSize()
-            .clickable(
-                interactionSource = null,
-                indication = null,
-                onClick = {
-                    onTaskClick(task)
-                }
-            ),
+            .clickableWithoutRipple {
+                onTaskClick(task)
+            },
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(if(shouldBeExpanded) 1.0f else 0.9f)
+                .fillMaxSize(if (shouldBeExpanded) 1.0f else 0.9f)
                 .padding(12.dp),
         ) {
             Row(

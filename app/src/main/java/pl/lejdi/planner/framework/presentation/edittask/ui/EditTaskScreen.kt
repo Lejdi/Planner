@@ -1,5 +1,6 @@
 package pl.lejdi.planner.framework.presentation.edittask.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -38,6 +41,7 @@ import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerDatePicker
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerTimePicker
+import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.FormValidator
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.NotEmptyValidation
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskContract
@@ -111,135 +115,141 @@ fun EditTaskScreen(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            FormTextField(
-                value = taskName,
-                onValueChange = {
-                    taskName = it
-                },
-                label = "enter task name",
-                maxLines = 1,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                validation = formValidator.addValidation(NotEmptyValidation)
-            )
-            FormTextField(
-                value = taskDescription,
-                onValueChange = {
-                    taskDescription = it
-                },
-                label = "enter task description",
-                minLines = 3,
-            )
-            RadioButtonsContainer(
-                selectedRadio = selectedRadio,
-                onRadioSelect = onRadioSelect,
-                daysInterval = daysInterval
-            )
-            if (selectedRadio != EditTaskRadioButton.ASAP) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+        Scaffold { contentPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = MaterialTheme.colorScheme.secondaryContainer
+                    )
+                    .padding(contentPadding)
+                    .padding(16.dp)
+            ) {
+                FormTextField(
+                    value = taskName,
+                    onValueChange = {
+                        taskName = it
+                    },
+                    label = "enter task name",
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    validation = formValidator.addValidation(NotEmptyValidation)
+                )
+                FormTextField(
+                    value = taskDescription,
+                    onValueChange = {
+                        taskDescription = it
+                    },
+                    label = "enter task description",
+                    minLines = 3,
+                )
+                RadioButtonsContainer(
+                    selectedRadio = selectedRadio,
+                    onRadioSelect = onRadioSelect,
+                    daysInterval = daysInterval
+                )
+                if (selectedRadio != EditTaskRadioButton.ASAP) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        OutlinedTextField(
+                            enabled = false,
+                            modifier = Modifier
+                                .width(150.dp)
+                                .clickableWithoutRipple {
+                                    showStartDatePickerDialog = true
+                                },
+                            value = EditTaskFormHelper.formatDateForDisplay(
+                                LocalContext.current,
+                                selectedStartDate
+                            ),
+                            onValueChange = {},
+                            label = {
+                                val labelText =
+                                    if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date"
+                                    else "Start Date"
+                                Text(labelText)
+                            }
+                        )
+                        OutlinedTextField(
+                            enabled = false,
+                            modifier = Modifier
+                                .width(100.dp)
+                                .clickableWithoutRipple {
+                                    showTimePickerDialog = true
+                                },
+                            value = EditTaskFormHelper.formatHoursForDisplay(
+                                LocalContext.current,
+                                selectedTime
+                            ),
+                            onValueChange = {},
+                            label = {
+                                Text("Hour")
+                            }
+                        )
+                    }
+                }
+
+                if(selectedRadio == EditTaskRadioButton.PERIODIC){
                     OutlinedTextField(
                         enabled = false,
                         modifier = Modifier
                             .width(150.dp)
-                            .clickable {
-                                showStartDatePickerDialog = true
+                            .clickableWithoutRipple {
+                                showEndDatePickerDialog = true
                             },
                         value = EditTaskFormHelper.formatDateForDisplay(
                             LocalContext.current,
-                            selectedStartDate
+                            selectedEndDate
                         ),
                         onValueChange = {},
                         label = {
-                            val labelText =
-                                if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date"
-                                else "Start Date"
-                            Text(labelText)
-                        }
-                    )
-                    OutlinedTextField(
-                        enabled = false,
-                        modifier = Modifier
-                            .width(100.dp)
-                            .clickable {
-                                showTimePickerDialog = true
-                            },
-                        value = EditTaskFormHelper.formatHoursForDisplay(
-                            LocalContext.current,
-                            selectedTime
-                        ),
-                        onValueChange = {},
-                        label = {
-                            Text("Hour")
+                            Text("End Date")
                         }
                     )
                 }
-            }
 
-            if(selectedRadio == EditTaskRadioButton.PERIODIC){
-                OutlinedTextField(
-                    enabled = false,
-                    modifier = Modifier
-                        .width(150.dp)
-                        .clickable {
-                            showEndDatePickerDialog = true
-                        },
-                    value = EditTaskFormHelper.formatDateForDisplay(
-                        LocalContext.current,
-                        selectedEndDate
-                    ),
-                    onValueChange = {},
-                    label = {
-                        Text("End Date")
-                    }
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = {
-                        if(taskDetails == null){
-                            navigateBack(false)
-                        }
-                        else {
-                            viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))
-                        }
-                    }
-                ) { Text("Delete") }
-                Button(
-                    onClick = {
-                        if(formValidator.validate()){
-                            val task = Task(
-                                id = taskDetails?.id ?: 0,
-                                name = taskName,
-                                description = taskDescription,
-                                startDate = selectedStartDate,
-                                endDate = selectedEndDate,
-                                hour = selectedTime,
-                                daysInterval = daysInterval.value ?: 0,
-                                asap = selectedRadio == EditTaskRadioButton.ASAP
-                            )
-                            val event = if(taskDetails == null){
-                                EditTaskContract.Event.AddTask(task)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = {
+                            if(taskDetails == null){
+                                navigateBack(false)
                             }
                             else {
-                                EditTaskContract.Event.EditTask(task)
+                                viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))
                             }
-                            viewModel.sendEvent(event)
                         }
-                    }
-                ) { Text("Save") }
+                    ) { Text("Delete") }
+                    Button(
+                        onClick = {
+                            if(formValidator.validate()){
+                                val task = Task(
+                                    id = taskDetails?.id ?: 0,
+                                    name = taskName,
+                                    description = taskDescription,
+                                    startDate = selectedStartDate,
+                                    endDate = selectedEndDate,
+                                    hour = selectedTime,
+                                    daysInterval = daysInterval.value ?: 0,
+                                    asap = selectedRadio == EditTaskRadioButton.ASAP
+                                )
+                                val event = if(taskDetails == null){
+                                    EditTaskContract.Event.AddTask(task)
+                                }
+                                else {
+                                    EditTaskContract.Event.EditTask(task)
+                                }
+                                viewModel.sendEvent(event)
+                            }
+                        }
+                    ) { Text("Save") }
+                }
             }
         }
 

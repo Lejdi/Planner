@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 import pl.lejdi.planner.framework.presentation.util.ErrorsQueue
 
 @Composable
@@ -36,11 +37,7 @@ fun BaseScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Gray.copy(alpha = 0.3f))
-                    .clickable(
-                        interactionSource = null,
-                        indication = null,
-                        onClick = {}
-                    )
+                    .clickableWithoutRipple{}
             ) {
                 CircularProgressIndicator()
             }

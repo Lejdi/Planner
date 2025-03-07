@@ -1,5 +1,6 @@
 package pl.lejdi.planner.framework.presentation.common.ui.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -8,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.Validation
 
 @Composable
@@ -17,6 +19,7 @@ fun FormTextField(
     label: String,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
+    singleLine: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     validation: Validation? = null
 ) {
@@ -36,7 +39,10 @@ fun FormTextField(
         maxLines = maxLines,
         minLines = minLines,
         keyboardOptions = keyboardOptions,
-        isError = isError
+        isError = isError,
+        singleLine = singleLine,
+        modifier = Modifier
+            .fillMaxWidth()
     )
 
 }
