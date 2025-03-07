@@ -14,4 +14,8 @@ object NotEmptyValidation : Validation() {
     override fun fieldToValidate(fieldValue: Any) {
         fieldToValidate = fieldValue
     }
+
+    override fun getErrorMessage(): String {
+        return "Field cannot be empty"
+    }
 }

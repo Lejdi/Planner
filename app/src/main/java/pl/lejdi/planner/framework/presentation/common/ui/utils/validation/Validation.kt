@@ -17,4 +17,8 @@ abstract class Validation {
     fun onValidationChange(onChange: (Boolean) -> Unit) {
         onValidationChangeListener = onChange
     }
+
+    open fun getErrorMessage() : String {
+        return "Invalid value"
+    }
 }
