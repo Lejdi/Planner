@@ -1,7 +1,6 @@
 package pl.lejdi.planner.framework.presentation.edittask.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,8 +35,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.model.Time
+import pl.lejdi.planner.business.utils.date.daysSinceDate
 import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
+import pl.lejdi.planner.framework.presentation.common.ui.components.DatePickerField
 import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerDatePicker
 import pl.lejdi.planner.framework.presentation.common.ui.components.PlannerTimePicker
@@ -86,24 +87,6 @@ fun EditTaskScreen(
 
         val taskSelectedRadio = EditTaskFormHelper.getSelectedRadioForTask(taskDetails)
         val (selectedRadio, onRadioSelect) = remember { mutableStateOf(taskSelectedRadio) }
-
-        var showStartDatePickerDialog by remember { mutableStateOf(false) }
-        val startDatePickerState = rememberDatePickerState().apply {
-            val initialTime = taskDetails?.startDate ?: today()
-            selectedDateMillis = initialTime.time
-        }
-
-        var showEndDatePickerDialog by remember { mutableStateOf(false) }
-        val endDatePickerState = rememberDatePickerState(
-            selectableDates = object : SelectableDates{
-                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                    return utcTimeMillis > selectedStartDate.time
-                }
-            }
-        ).apply {
-            val initialTime = taskDetails?.endDate ?: today()
-            selectedDateMillis = initialTime.time
-        }
 
         var showTimePickerDialog by remember { mutableStateOf(false) }
         val timePickerState = rememberTimePickerState(
@@ -155,24 +138,21 @@ fun EditTaskScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        OutlinedTextField(
-                            enabled = false,
-                            modifier = Modifier
-                                .width(150.dp)
-                                .clickableWithoutRipple {
-                                    showStartDatePickerDialog = true
-                                },
+                        DatePickerField(
                             value = EditTaskFormHelper.formatDateForDisplay(
                                 LocalContext.current,
                                 selectedStartDate
                             ),
-                            onValueChange = {},
-                            label = {
-                                val labelText =
-                                    if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date"
-                                    else "Start Date"
-                                Text(labelText)
-                            }
+                            label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) "Date" else "Start Date",
+                            onDateSelected = {
+                                selectedStartDate = it ?: today()
+                                selectedEndDate?.let { endDate ->
+                                    if(selectedStartDate.daysSinceDate(endDate) < 0){
+                                        selectedEndDate = selectedStartDate
+                                    }
+                                }
+                            },
+                            initialDate = selectedStartDate,
                         )
                         OutlinedTextField(
                             enabled = false,
@@ -192,43 +172,40 @@ fun EditTaskScreen(
                         )
                     }
                 }
-
-                if(selectedRadio == EditTaskRadioButton.PERIODIC){
-                    OutlinedTextField(
-                        enabled = false,
-                        modifier = Modifier
-                            .width(150.dp)
-                            .clickableWithoutRipple {
-                                showEndDatePickerDialog = true
-                            },
+                if (selectedRadio == EditTaskRadioButton.PERIODIC) {
+                    DatePickerField(
                         value = EditTaskFormHelper.formatDateForDisplay(
                             LocalContext.current,
                             selectedEndDate
                         ),
-                        onValueChange = {},
-                        label = {
-                            Text("End Date")
+                        label = "End date",
+                        onDateSelected = {
+                            selectedEndDate = it
+                        },
+                        initialDate = selectedEndDate,
+                        selectableDates = object : SelectableDates {
+                            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                                return utcTimeMillis > selectedStartDate.time
+                            }
                         }
                     )
                 }
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
                         onClick = {
-                            if(taskDetails == null){
+                            if (taskDetails == null) {
                                 navigateBack(false)
-                            }
-                            else {
+                            } else {
                                 viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))
                             }
                         }
                     ) { Text("Delete") }
                     Button(
                         onClick = {
-                            if(formValidator.validate()){
+                            if (formValidator.validate()) {
                                 val task = Task(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
@@ -239,10 +216,9 @@ fun EditTaskScreen(
                                     daysInterval = daysInterval.value ?: 0,
                                     asap = selectedRadio == EditTaskRadioButton.ASAP
                                 )
-                                val event = if(taskDetails == null){
+                                val event = if (taskDetails == null) {
                                     EditTaskContract.Event.AddTask(task)
-                                }
-                                else {
+                                } else {
                                     EditTaskContract.Event.EditTask(task)
                                 }
                                 viewModel.sendEvent(event)
@@ -251,30 +227,6 @@ fun EditTaskScreen(
                     ) { Text("Save") }
                 }
             }
-        }
-
-        if (showStartDatePickerDialog) {
-            PlannerDatePicker(
-                dismiss = {
-                    showStartDatePickerDialog = false
-                },
-                applyDate = {
-                    selectedStartDate =
-                        startDatePickerState.selectedDateMillis?.let { Date(it) } ?: today()
-                },
-                state = startDatePickerState
-            )
-        }
-        if (showEndDatePickerDialog) {
-            PlannerDatePicker(
-                dismiss = {
-                    showEndDatePickerDialog = false
-                },
-                applyDate = {
-                    selectedEndDate = endDatePickerState.selectedDateMillis?.let { Date(it) }
-                },
-                state = endDatePickerState
-            )
         }
         if (showTimePickerDialog) {
             PlannerTimePicker(
