@@ -54,7 +54,8 @@ data class EditTaskScreenRoute(
 fun EditTaskScreen(
     taskDetails: Task?,
     navigateBack: (Boolean) -> Unit,
-    viewModel: EditTaskViewModel = hiltViewModel()
+    viewModel: EditTaskViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
 ) = BaseScreen(
     displayProgressBar = viewModel.viewState.value.isLoading,
     errorsQueue = viewModel.errorsQueue
@@ -68,7 +69,9 @@ fun EditTaskScreen(
             }
         }.collect()
     }
-    Box {
+    Box(
+        modifier = modifier
+    ) {
         val formValidator = remember { FormValidator() }
 
         var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }

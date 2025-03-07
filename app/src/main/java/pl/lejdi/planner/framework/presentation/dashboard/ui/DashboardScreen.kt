@@ -1,5 +1,9 @@
 package pl.lejdi.planner.framework.presentation.dashboard.ui
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +27,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.framework.presentation.common.navigation.FAB_EXPLODE_ANIMATION_KEY
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardContract
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
@@ -30,11 +35,13 @@ import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
 @Serializable
 object DashboardScreenRoute
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun DashboardScreen(
+fun SharedTransitionScope.DashboardScreen(
     navigateToDetails: (Task?) -> Unit,
     refreshScreen: Boolean,
-    viewModel: DashboardViewModel = hiltViewModel()
+    viewModel: DashboardViewModel = hiltViewModel(),
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) = BaseScreen(
     displayProgressBar = viewModel.viewState.value.isLoading,
     errorsQueue = viewModel.errorsQueue
@@ -57,6 +64,14 @@ fun DashboardScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.sendEvent(DashboardContract.Event.AddButtonClicked) },
+                modifier = Modifier
+                    .sharedBounds(
+                        sharedContentState = rememberSharedContentState(FAB_EXPLODE_ANIMATION_KEY),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(1000)
+                        }
+                    )
             ) {
                 Icon(Icons.Filled.Add, null)
             }

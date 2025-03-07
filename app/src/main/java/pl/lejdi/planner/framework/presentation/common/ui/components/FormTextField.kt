@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.Validation
 
@@ -26,7 +25,8 @@ fun FormTextField(
     minLines: Int = 1,
     singleLine: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    validation: Validation? = null
+    validation: Validation? = null,
+    modifier: Modifier = Modifier
 ) {
     var isError by remember { mutableStateOf(false) }
     validation?.fieldToValidate(value)
@@ -34,7 +34,9 @@ fun FormTextField(
         isError = !isValid
     }
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         OutlinedTextField(
             value = value,
             onValueChange = {
