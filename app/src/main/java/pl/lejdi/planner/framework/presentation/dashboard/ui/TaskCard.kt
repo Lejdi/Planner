@@ -48,7 +48,7 @@ fun TaskCard(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(if (shouldBeExpanded) 1.0f else 0.9f)
+                .fillMaxWidth(if (shouldBeExpanded) 1.0f else 0.9f)
                 .padding(12.dp),
         ) {
             Row(
