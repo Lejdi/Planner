@@ -36,7 +36,7 @@ fun DatePickerField(
         selectableDates = selectableDates
     ).apply {
         val initialTime = initialDate ?: today()
-        selectedDateMillis = initialTime.time + 12*60*60*1000 //set time to mid of day - midnight is displayed wrong
+        selectedDateMillis = initialTime.time
     }
 
     Box{

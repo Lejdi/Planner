@@ -80,7 +80,7 @@ fun EditTaskScreen(
 
         var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }
         var taskDescription by remember { mutableStateOf(taskDetails?.description ?: "") }
-        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: Date()) }
+        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: today()) }
         var selectedEndDate by remember { mutableStateOf(taskDetails?.endDate) }
         var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
         val daysInterval = remember { mutableStateOf(taskDetails?.daysInterval) }
