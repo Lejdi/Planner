@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                                         sharedContentState = rememberSharedContentState(animationKey),
                                         animatedVisibilityScope = this,
                                         boundsTransform = { _, _ ->
-                                            tween(1000)
+                                            tween(500)
                                         }
                                     )
                             )

@@ -69,7 +69,7 @@ fun SharedTransitionScope.DashboardScreen(
                         sharedContentState = rememberSharedContentState(FAB_EXPLODE_ANIMATION_KEY),
                         animatedVisibilityScope = animatedVisibilityScope,
                         boundsTransform = { _, _ ->
-                            tween(1000)
+                            tween(500)
                         }
                     )
             ) {
