@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 
@@ -49,7 +50,8 @@ fun SingleDayView(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
-                .padding(8.dp)
+                .padding(8.dp),
+            textAlign = TextAlign.Center
         )
         val listState = rememberLazyListState()
         val localDensity = LocalDensity.current
