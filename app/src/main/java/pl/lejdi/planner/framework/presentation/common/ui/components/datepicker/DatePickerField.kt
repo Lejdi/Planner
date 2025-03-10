@@ -36,7 +36,7 @@ fun DatePickerField(
         selectableDates = selectableDates
     ).apply {
         val initialTime = initialDate ?: today()
-        selectedDateMillis = initialTime.time
+        selectedDateMillis = initialTime.time + 60 * 60 * 1000//time picker shifted by 1day when set before 1AM
     }
 
     Box{

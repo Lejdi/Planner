@@ -27,7 +27,7 @@ fun Date.addDays(days: Int) : Date {
 
 fun today() : Date {
     val calendar = Calendar.getInstance()
-    calendar[Calendar.HOUR_OF_DAY] = 1 //time picker shifted by 1day when set to 0
+    calendar[Calendar.HOUR_OF_DAY] = 0
     calendar[Calendar.MINUTE] = 0
     calendar[Calendar.SECOND] = 0
     calendar[Calendar.MILLISECOND] = 0
