@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 import java.util.Calendar
 import java.util.Date
@@ -35,7 +34,7 @@ fun DatePickerField(
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
         selectableDates = selectableDates,
-        initialSelectedDateMillis = getInitialTime(initialDate)
+        initialSelectedDateMillis = initialDate?.let { getInitialTime(it) }
     )
 
     Box{
@@ -74,9 +73,8 @@ fun DatePickerField(
 }
 
 //initial time in datepicker is set to UTC - for different time zones the selected date might differ
-private fun getInitialTime(initialDate : Date?) : Long{
-    val initialTime = initialDate ?: today()
+private fun getInitialTime(initialDate : Date) : Long{
     val calendar = Calendar.getInstance()
-    calendar.time = initialTime
+    calendar.time = initialDate
     return calendar.timeInMillis + calendar.timeZone.rawOffset
 }
