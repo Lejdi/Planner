@@ -2,8 +2,12 @@ package pl.lejdi.planner.business.utils.date
 
 import android.text.format.DateUtils
 import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 fun Date?.daysSinceDate(date: Date?): Int {
     if(this == null || date == null){
@@ -23,7 +27,7 @@ fun Date.addDays(days: Int) : Date {
 
 fun today() : Date {
     val calendar = Calendar.getInstance()
-    calendar[Calendar.HOUR_OF_DAY] = 0
+    calendar[Calendar.HOUR_OF_DAY] = 1 //time picker shifted by 1day when set to 0
     calendar[Calendar.MINUTE] = 0
     calendar[Calendar.SECOND] = 0
     calendar[Calendar.MILLISECOND] = 0
