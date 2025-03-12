@@ -196,15 +196,16 @@ fun EditTaskScreen(
                     Button(
                         onClick = {
                             if (formValidator.validate()) {
+                                val isAsap = selectedRadio == EditTaskRadioButton.ASAP
                                 val task = Task(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
                                     description = taskDescription,
-                                    startDate = selectedStartDate,
+                                    startDate = if(isAsap) today() else selectedStartDate,
                                     endDate = selectedEndDate,
                                     hour = selectedTime,
-                                    daysInterval = daysInterval.value ?: 0,
-                                    asap = selectedRadio == EditTaskRadioButton.ASAP
+                                    daysInterval = if(isAsap) 0 else daysInterval.value ?: 0,
+                                    asap = isAsap
                                 )
                                 val event = if (taskDetails == null) {
                                     EditTaskContract.Event.AddTask(task)
