@@ -1,5 +1,20 @@
-## Architectural inspiration
+# Planner
 
-https://github.com/mitchtabian/Clean-Notes/tree/master/app/src/main/java/com/codingwithmitch/cleannotes
+Planner is a TODO app made to practice clean architecture and new technologies.  
+The app is written in MVI architecture with usage of technologies such as:
+- Room DB
+- Kotlin Flow
+- Jetpack Compose
+- Jetpack Datastore
+- Hilt
+- Shared Element Transition
+
+Architecture diagram:
 
 ![s](https://user-images.githubusercontent.com/32893005/174487394-6ba6821a-5f28-4738-8d46-e51c5e5403e6.png)
+
+### Plans for future development
+- UI tests in Espresso or Cucumber
+- Unit tests
+- integrate Room with kotlin flows - emit values on every change instead of manually refreshing list
+- some backend integration?
