@@ -8,6 +8,7 @@ The app is written in MVI architecture with usage of technologies such as:
 - Jetpack Datastore
 - Hilt
 - Shared Element Transition
+- Cucumber
 
 Architecture diagram:
 
