@@ -13,3 +13,11 @@ Feature: Ability to display tasks dashboard
     And user sees no tasks on day "18.07.2025"
     And user sees no tasks on day "19.07.2025"
     And user sees no tasks on day "20.07.2025"
+
+  Scenario: The one where user can see tasks on the dashboard
+
+  Scenario: The one where user completes ASAP task on dashboard
+
+  Scenario: The one where user completes one time task on dashboard
+
+  Scenario: The one where user completes periodic task on dashboard
