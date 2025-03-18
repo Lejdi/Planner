@@ -13,7 +13,7 @@ import pl.lejdi.planner.steps.BaseSteps
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.cucumber.java.en.And
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_FAB_TEST_TAG
-import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_TASKS_PAGER
+import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_TASKS_PAGER_TAG
 import pl.lejdi.planner.framework.presentation.dashboard.ui.SingleDayViewTestTags.SINGLE_DAY_TASKS_COLUMN_TAG
 import pl.lejdi.planner.test.swipeToChildWithText
 
@@ -24,7 +24,7 @@ class DashboardSteps: BaseSteps() {
     fun userSeesNoTasksOnDay(date: String) {
         val dateString = displayableDateFormatter.formatDateToDisplayable(dateFormatter.parse(date))
 
-        onNodeWithTag(DASHBOARD_TASKS_PAGER).swipeToChildWithText(dateString!!) {
+        onNodeWithTag(DASHBOARD_TASKS_PAGER_TAG).swipeToChildWithText(dateString!!) {
             onChildren().filterToOne(hasAnyChild(hasText(dateString))).apply {
                 assertIsDisplayed()
                 onChildren().filterToOne(hasTestTag(SINGLE_DAY_TASKS_COLUMN_TAG)).onChildren().assertCountEquals(0)
