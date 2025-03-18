@@ -5,6 +5,7 @@ import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.usecases.UseCase
 import pl.lejdi.planner.business.usecases.UseCaseResult
+import pl.lejdi.planner.business.utils.AppConfiguration.NUMBER_OF_VISIBLE_DAYS
 import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.business.utils.date.addDays
@@ -35,7 +36,7 @@ class GetTasksForDashboard(
 
         val result = mutableListOf<SingleDayDataDTO>()
         val today = dateUtil.getToday()
-        for (i in 0..7) { //create map of tasks today and for the next week - business requirement to display only this range
+        for (i in 0 until NUMBER_OF_VISIBLE_DAYS) {
             val filledDate = today.addDays(i)
             val dateString = dateFormatter.formatDateToDisplayable(filledDate)!!
             val tasksForDate = taskDisplayableMapper.mapListFromBusinessModel(
