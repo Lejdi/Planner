@@ -1,11 +1,14 @@
 package pl.lejdi.planner.steps
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import io.cucumber.junit.WithJunitRule
 import org.junit.Rule
-import pl.lejdi.planner.framework.presentation.MainActivity
 
+@WithJunitRule(useAsTestClassInDescription = true)
+@HiltAndroidTest
 open class BaseSteps {
+    @Rule(order = 0)
     @JvmField
-    @Rule
-    var activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val hiltRule = HiltAndroidRule(this)
 }

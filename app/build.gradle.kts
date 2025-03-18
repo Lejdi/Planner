@@ -21,7 +21,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
+        testInstrumentationRunner = "pl.lejdi.planner.test.PlannerTestInstrumentationRunner"
     }
 
     buildTypes {
@@ -90,4 +90,5 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.cucumber.android)
+    androidTestImplementation(libs.androidx.hilt.testing)
 }

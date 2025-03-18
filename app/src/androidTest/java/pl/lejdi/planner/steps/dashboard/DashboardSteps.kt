@@ -6,9 +6,10 @@ import io.cucumber.java.en.Then
 import pl.lejdi.planner.framework.presentation.MainActivity
 import pl.lejdi.planner.steps.BaseSteps
 import androidx.test.core.app.ActivityScenario.launch
+import dagger.hilt.android.testing.HiltAndroidTest
 
+@HiltAndroidTest
 class DashboardSteps: BaseSteps() {
-
     @Given("user has no saved tasks")
     fun userHasNoSavedTasks(){
 

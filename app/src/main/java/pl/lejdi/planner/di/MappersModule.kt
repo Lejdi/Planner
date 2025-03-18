@@ -5,12 +5,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object PresentationModule {
+object MappersModule {
+
+    @Singleton
+    @Provides
+    fun provideCacheTaskMapper(dateFormatter: DateFormatter) : TaskEntityMapper {
+        return TaskEntityMapper(dateFormatter)
+    }
 
     @Singleton
     @Provides
