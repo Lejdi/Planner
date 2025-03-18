@@ -43,7 +43,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 androidx-hilt-navigation = { group= "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_compose_navigation"}
 androidx-datastore = { group= "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
 cucumber-android = { group= "io.cucumber", name = "cucumber-android", version.ref = "cucumber"}
-androidx-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+cucumber-android-hilt = { group= "io.cucumber", name = "cucumber-android-hilt", version.ref = "cucumber"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
