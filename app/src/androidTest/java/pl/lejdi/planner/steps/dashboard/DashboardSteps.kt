@@ -1,8 +1,10 @@
 package pl.lejdi.planner.steps.dashboard
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyChild
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,8 +14,8 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.cucumber.java.en.And
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_FAB_TEST_TAG
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_TASKS_PAGER
+import pl.lejdi.planner.framework.presentation.dashboard.ui.SingleDayViewTestTags.SINGLE_DAY_TASKS_COLUMN_TAG
 import pl.lejdi.planner.test.swipeToChildWithText
-
 
 @HiltAndroidTest
 class DashboardSteps: BaseSteps() {
@@ -23,7 +25,10 @@ class DashboardSteps: BaseSteps() {
         val dateString = displayableDateFormatter.formatDateToDisplayable(dateFormatter.parse(date))
 
         onNodeWithTag(DASHBOARD_TASKS_PAGER).swipeToChildWithText(dateString!!) {
-            onChildren().filterToOne(hasAnyChild(hasText(dateString))).assertIsDisplayed()
+            onChildren().filterToOne(hasAnyChild(hasText(dateString))).apply {
+                assertIsDisplayed()
+                onChildren().filterToOne(hasTestTag(SINGLE_DAY_TASKS_COLUMN_TAG)).onChildren().assertCountEquals(0)
+            }
         }
     }
 
