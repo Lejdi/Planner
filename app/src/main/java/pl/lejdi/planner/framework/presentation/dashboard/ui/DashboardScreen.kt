@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -31,6 +32,7 @@ import pl.lejdi.planner.framework.presentation.common.navigation.FAB_EXPLODE_ANI
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardContract
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
+import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_FAB_TEST_TAG
 
 @Serializable
 object DashboardScreenRoute
@@ -72,6 +74,7 @@ fun SharedTransitionScope.DashboardScreen(
                             tween(500)
                         }
                     )
+                    .testTag(DASHBOARD_FAB_TEST_TAG)
             ) {
                 Icon(Icons.Filled.Add, null)
             }
@@ -107,4 +110,8 @@ fun SharedTransitionScope.DashboardScreen(
             }
         }
     }
+}
+
+object DashboardScreenTestTags{
+    const val DASHBOARD_FAB_TEST_TAG = "Dashboard.FAB"
 }

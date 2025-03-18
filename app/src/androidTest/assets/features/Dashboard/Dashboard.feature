@@ -4,7 +4,8 @@ Feature: Ability to display tasks dashboard
     Given user has no saved tasks
     And current date is "13.07.2025"
     When user launches the application
-    Then user sees no tasks on day "13.07.2025"
+    Then add task button is visible
+    And user sees no tasks on day "13.07.2025"
     And user sees no tasks on day "14.07.2025"
     And user sees no tasks on day "15.07.2025"
     And user sees no tasks on day "16.07.2025"
