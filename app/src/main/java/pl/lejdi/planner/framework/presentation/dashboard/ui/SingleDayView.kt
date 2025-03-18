@@ -19,10 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
+import pl.lejdi.planner.framework.presentation.dashboard.ui.SingleDayViewTestTags.SINGLE_DAY_TASKS_COLUMN_TAG
+import pl.lejdi.planner.framework.presentation.dashboard.ui.SingleDayViewTestTags.SINGLE_DAY_VIEW_TAG
 
 @Composable
 fun SingleDayView(
@@ -42,7 +45,9 @@ fun SingleDayView(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(SINGLE_DAY_VIEW_TAG)
     ) {
         Text(
             text = date,
@@ -65,7 +70,9 @@ fun SingleDayView(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .testTag(SINGLE_DAY_TASKS_COLUMN_TAG)
         ) {
             itemsIndexed(items = tasks){ index, task ->
                 TaskCard(
@@ -85,4 +92,10 @@ fun SingleDayView(
             }
         }
     }
+}
+
+
+object SingleDayViewTestTags{
+    const val SINGLE_DAY_VIEW_TAG = "SingleDayView"
+    const val SINGLE_DAY_TASKS_COLUMN_TAG = "SingleDayView.TasksColumn"
 }

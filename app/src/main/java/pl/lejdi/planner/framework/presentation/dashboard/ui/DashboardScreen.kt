@@ -33,6 +33,7 @@ import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardContract
 import pl.lejdi.planner.framework.presentation.dashboard.DashboardViewModel
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_FAB_TEST_TAG
+import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_TASKS_PAGER
 
 @Serializable
 object DashboardScreenRoute
@@ -94,6 +95,7 @@ fun SharedTransitionScope.DashboardScreen(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier
                     .padding(contentPadding)
+                    .testTag(DASHBOARD_TASKS_PAGER)
             ) { page ->
                 val (date, tasksList) = viewModel.viewState.value.daysTasksMap[page]
                 SingleDayView(
@@ -114,4 +116,5 @@ fun SharedTransitionScope.DashboardScreen(
 
 object DashboardScreenTestTags{
     const val DASHBOARD_FAB_TEST_TAG = "Dashboard.FAB"
+    const val DASHBOARD_TASKS_PAGER = "Dashboard.TasksPager"
 }
