@@ -34,8 +34,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.R
 import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.business.utils.date.daysSinceDate
-import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
 import pl.lejdi.planner.framework.presentation.common.ui.components.datepicker.DatePickerField
 import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextField
@@ -46,7 +46,6 @@ import pl.lejdi.planner.framework.presentation.edittask.EditTaskContract
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskViewModel
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskFormHelper
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskRadioButton
-import java.util.Date
 
 @Serializable
 data class EditTaskScreenRoute(
@@ -59,7 +58,8 @@ fun EditTaskScreen(
     taskDetails: Task?,
     navigateBack: (Boolean) -> Unit,
     viewModel: EditTaskViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    dateUtil: DateUtil
 ) = BaseScreen(
     displayProgressBar = viewModel.viewState.value.isLoading,
     errorsQueue = viewModel.errorsQueue
@@ -80,7 +80,7 @@ fun EditTaskScreen(
 
         var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }
         var taskDescription by remember { mutableStateOf(taskDetails?.description ?: "") }
-        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: today()) }
+        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: dateUtil.getToday()) }
         var selectedEndDate by remember { mutableStateOf(taskDetails?.endDate) }
         var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
         val daysInterval = remember { mutableStateOf(taskDetails?.daysInterval) }
@@ -140,7 +140,7 @@ fun EditTaskScreen(
                                 ),
                                 label = if (selectedRadio == EditTaskRadioButton.SPECIFIC_DAY) stringResource(R.string.date_label) else stringResource(R.string.start_date_label),
                                 onDateSelected = {
-                                    selectedStartDate = it ?: today()
+                                    selectedStartDate = it ?: dateUtil.getToday()
                                     selectedEndDate?.let { endDate ->
                                         if(selectedStartDate.daysSinceDate(endDate) < 0){
                                             selectedEndDate = selectedStartDate
@@ -201,7 +201,7 @@ fun EditTaskScreen(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
                                     description = taskDescription,
-                                    startDate = if(isAsap) today() else selectedStartDate,
+                                    startDate = if(isAsap) dateUtil.getToday() else selectedStartDate,
                                     endDate = selectedEndDate,
                                     hour = selectedTime,
                                     daysInterval = if(isAsap) 0 else daysInterval.value ?: 0,

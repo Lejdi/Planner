@@ -9,7 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreInteractor
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.di.qualifiers.PreferencesDataStoreWrapperQualifier
 import pl.lejdi.planner.framework.datasource.datastore.DataStoreWrapper
 import pl.lejdi.planner.framework.datasource.datastore.PreferencesDataStoreWrapper

@@ -1,4 +1,4 @@
-package pl.lejdi.planner.business.utils.date
+package pl.lejdi.planner.business.utils.date.format
 
 interface DateFormatProvider {
     val CACHE_DATE_FORMAT: String

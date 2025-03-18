@@ -25,8 +25,9 @@ fun Date.addDays(days: Int) : Date {
     return calendar.time
 }
 
-fun today() : Date {
+fun Date.setMidnight() : Date {
     val calendar = Calendar.getInstance()
+    calendar.time = this
     calendar[Calendar.HOUR_OF_DAY] = 0
     calendar[Calendar.MINUTE] = 0
     calendar[Calendar.SECOND] = 0

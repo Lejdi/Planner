@@ -5,11 +5,11 @@ import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.usecases.UseCase
 import pl.lejdi.planner.business.usecases.UseCaseResult
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.DateUtil
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.business.utils.date.addDays
 import pl.lejdi.planner.business.utils.date.daysSinceDate
 import pl.lejdi.planner.business.utils.date.isToday
-import pl.lejdi.planner.business.utils.date.today
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.SingleDayDataDTO
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
@@ -21,7 +21,8 @@ class GetTasksForDashboard(
     private val tasksDataSource: TasksDataSource,
     private val taskEntityMapper: TaskEntityMapper,
     private val taskDisplayableMapper: TaskDisplayableMapper,
-    private val dateFormatter: DateFormatter
+    private val dateFormatter: DateFormatter,
+    private val dateUtil: DateUtil
 ) : UseCase<UseCaseResult<List<SingleDayDataDTO>>, Unit>() {
 
     override suspend fun execute(params: Unit): UseCaseResult<List<SingleDayDataDTO>> {
@@ -33,7 +34,7 @@ class GetTasksForDashboard(
         val tasksList = taskEntityMapper.mapListToBusinessModel(cacheTasksList)
 
         val result = mutableListOf<SingleDayDataDTO>()
-        val today = today()
+        val today = dateUtil.getToday()
         for (i in 0..7) { //create map of tasks today and for the next week - business requirement to display only this range
             val filledDate = today.addDays(i)
             val dateString = dateFormatter.formatDateToDisplayable(filledDate)!!

@@ -1,4 +1,4 @@
-package pl.lejdi.planner.business.utils.date
+package pl.lejdi.planner.business.utils.date.format
 
 import pl.lejdi.planner.business.data.model.Time
 import java.util.Date

@@ -7,7 +7,7 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.model.Time
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import java.util.Date
 
 object EditTaskFormHelper {

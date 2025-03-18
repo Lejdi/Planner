@@ -1,6 +1,6 @@
 package pl.lejdi.planner.business.data.cache.datastore
 
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.framework.datasource.datastore.DataStoreWrapper
 import java.util.Date
 

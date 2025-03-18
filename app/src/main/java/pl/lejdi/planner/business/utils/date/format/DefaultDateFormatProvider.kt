@@ -1,4 +1,4 @@
-package pl.lejdi.planner.business.utils.date
+package pl.lejdi.planner.business.utils.date.format
 
 import javax.inject.Inject
 

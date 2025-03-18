@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
 import pl.lejdi.planner.business.data.model.Task
+import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.framework.presentation.common.navigation.FAB_EXPLODE_ANIMATION_KEY
 import pl.lejdi.planner.framework.presentation.common.navigation.NO_ANIMATION
 import pl.lejdi.planner.framework.presentation.common.navigation.NavTypes
@@ -23,10 +24,15 @@ import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreen
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenRoute
+import javax.inject.Inject
 import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var dateUtil: DateUtil
+
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +76,8 @@ class MainActivity : ComponentActivity() {
                                         boundsTransform = { _, _ ->
                                             tween(500)
                                         }
-                                    )
+                                    ),
+                                dateUtil = dateUtil
                             )
                         }
                     }

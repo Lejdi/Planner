@@ -15,7 +15,8 @@ import pl.lejdi.planner.business.usecases.dashboard.DeleteOutdatedTasks
 import pl.lejdi.planner.business.usecases.dashboard.GetTasksForDashboard
 import pl.lejdi.planner.business.usecases.dashboard.MarkTaskComplete
 import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.DateUtil
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 
@@ -65,12 +66,14 @@ object UseCasesModule {
     fun provideDeleteOutdatedTasksUseCase(
         tasksDataSource: TasksDataSource,
         taskEntityMapper: TaskEntityMapper,
-        lastCacheCleanupDataStoreInteractor: LastCacheCleanupDataStoreInteractor
+        lastCacheCleanupDataStoreInteractor: LastCacheCleanupDataStoreInteractor,
+        dateUtil: DateUtil
     ) : DeleteOutdatedTasks {
         return DeleteOutdatedTasks(
             tasksDataSource = tasksDataSource,
             taskEntityMapper = taskEntityMapper,
             lastCacheCleanupDataStoreInteractor = lastCacheCleanupDataStoreInteractor,
+            dateUtil = dateUtil,
         )
     }
 
@@ -94,13 +97,15 @@ object UseCasesModule {
         tasksDataSource: TasksDataSource,
         taskEntityMapper: TaskEntityMapper,
         taskDisplayableMapper: TaskDisplayableMapper,
-        dateFormatter: DateFormatter
+        dateFormatter: DateFormatter,
+        dateUtil: DateUtil
     ) : GetTasksForDashboard {
         return GetTasksForDashboard(
             tasksDataSource = tasksDataSource,
             taskEntityMapper = taskEntityMapper,
             taskDisplayableMapper = taskDisplayableMapper,
-            dateFormatter = dateFormatter
+            dateFormatter = dateFormatter,
+            dateUtil = dateUtil
         )
     }
 

@@ -2,7 +2,7 @@ package pl.lejdi.planner.framework.presentation.common.model.task
 
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.util.ModelMapper
-import pl.lejdi.planner.business.utils.date.DateFormatter
+import pl.lejdi.planner.business.utils.date.format.DateFormatter
 
 class TaskDisplayableMapper(
     private val dateFormatter: DateFormatter
