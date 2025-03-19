@@ -45,8 +45,8 @@ class DeleteOutdatedTasks(
     private fun shouldTaskBeDeleted(task: Task) : Boolean{
         if(!task.asap){ //asap tasks always visible
             val currentDate = dateUtil.getToday()
-            val daysFromTheEnd = currentDate.daysSinceDate(task.endDate)
-            val daysFromTheStart = currentDate.daysSinceDate(task.startDate)
+            val daysFromTheEnd = task.endDate.daysSinceDate(currentDate)
+            val daysFromTheStart = task.startDate.daysSinceDate(currentDate)
             val oneTimeTaskInPastDate = task.daysInterval == 0 && daysFromTheStart > 0
             val finishedPeriodicTask = task.daysInterval > 0 && daysFromTheEnd > 0
             if(oneTimeTaskInPastDate || finishedPeriodicTask){
@@ -59,7 +59,7 @@ class DeleteOutdatedTasks(
     private suspend fun shouldPerformCleanup() : Boolean {
         val lastCleanUpDate = lastCacheCleanupDataStoreInteractor.getData()
         val currentDate = dateUtil.getToday()
-        val daysFromTheLastCleanup = currentDate.daysSinceDate(lastCleanUpDate)
+        val daysFromTheLastCleanup = lastCleanUpDate.daysSinceDate(currentDate)
         return daysFromTheLastCleanup > 7
     }
 

@@ -1,8 +1,10 @@
 Feature: Ability to display tasks dashboard
 
+  Background:
+    Given current date is "13.07.2025"
+
   Scenario: The one where user can see an empty dashboard
     Given user has no saved tasks
-    And current date is "13.07.2025"
     When user launches the application
     Then add task button is visible
     And user sees no tasks on day "13.07.2025"

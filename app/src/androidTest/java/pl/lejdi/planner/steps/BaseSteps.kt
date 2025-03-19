@@ -15,10 +15,10 @@ import javax.inject.Inject
 open class BaseSteps: SemanticsNodeInteractionsProvider by ComposeRuleHolder.composeRule {
 
     private val testDateFormat = "dd.MM.yyyy"
-    val dateFormatter: SimpleDateFormat = SimpleDateFormat(testDateFormat, Locale.ENGLISH)
+    val mockDateFormatter: SimpleDateFormat = SimpleDateFormat(testDateFormat, Locale.ENGLISH)
 
     @Inject
-    lateinit var displayableDateFormatter: DateFormatter
+    lateinit var businessDateFormatter: DateFormatter
 
     @get:Rule
     val composeRule = ComposeRuleHolder.composeRule

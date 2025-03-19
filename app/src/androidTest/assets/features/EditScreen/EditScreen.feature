@@ -1,5 +1,8 @@
 Feature: Ability to add and edit tasks
 
+  Background:
+    Given current date is "13.07.2025"
+
   Scenario: The one where customer adds new ASAP task
 
   Scenario: The one where customer adds new one time task

@@ -22,7 +22,7 @@ class DashboardSteps: BaseSteps() {
 
     @Then("user sees no tasks on day {string}")
     fun userSeesNoTasksOnDay(date: String) {
-        val dateString = displayableDateFormatter.formatDateToDisplayable(dateFormatter.parse(date))
+        val dateString = businessDateFormatter.formatDateToDisplayable(mockDateFormatter.parse(date))
 
         onNodeWithTag(DASHBOARD_TASKS_PAGER_TAG).swipeToChildWithText(dateString!!) {
             onChildren().filterToOne(hasAnyChild(hasText(dateString))).apply {
