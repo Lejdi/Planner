@@ -1,5 +1,7 @@
 package pl.lejdi.planner.business.usecases.dashboard
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSource
 import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.business.data.model.Task
@@ -23,35 +25,38 @@ class GetTasksForDashboard(
     private val taskDisplayableMapper: TaskDisplayableMapper,
     private val dateFormatter: DateFormatter,
     private val dateUtil: DateUtil
-) : UseCase<UseCaseResult<List<SingleDayDataDTO>>, Unit>() {
+) : UseCase<Flow<UseCaseResult<List<SingleDayDataDTO>>>, Unit>() {
 
-    override suspend fun execute(params: Unit): UseCaseResult<List<SingleDayDataDTO>> {
-        val cacheResult = tasksDataSource.getAllTasks()
-        if (cacheResult is CacheResult.Error) {
-            return UseCaseResult.Error(ErrorType.CacheError)
+    override suspend fun execute(params: Unit): Flow<UseCaseResult<List<SingleDayDataDTO>>> {
+        return tasksDataSource.getAllTasks().map { result ->
+            if (result is CacheResult.Error) {
+                UseCaseResult.Error(ErrorType.CacheError)
+            }
+            else {
+                val cacheTasksList = (result as CacheResult.Success).data
+                val tasksList = taskEntityMapper.mapListToBusinessModel(cacheTasksList)
+
+                val resultList = mutableListOf<SingleDayDataDTO>()
+                val today = dateUtil.getToday()
+                for (i in 0 until NUMBER_OF_VISIBLE_DAYS) {
+                    val filledDate = today.addDays(i)
+                    val dateString = dateFormatter.formatDateToDisplayable(filledDate)!!
+                    val tasksForDate = taskDisplayableMapper.mapListFromBusinessModel(
+                        filterTasksForDate(
+                            filledDate,
+                            tasksList
+                        )
+                    )
+                    val sortedTasks = tasksForDate
+                        .sortedWith(compareBy<TaskDisplayable> { it.priority }.thenBy { it.hour } )
+                    resultList.add(
+                        SingleDayDataDTO(dateString, sortedTasks)
+                    )
+                }
+
+                UseCaseResult.Success(resultList)
+            }
         }
-        val cacheTasksList = (cacheResult as CacheResult.Success).data
-        val tasksList = taskEntityMapper.mapListToBusinessModel(cacheTasksList)
-
-        val result = mutableListOf<SingleDayDataDTO>()
-        val today = dateUtil.getToday()
-        for (i in 0 until NUMBER_OF_VISIBLE_DAYS) {
-            val filledDate = today.addDays(i)
-            val dateString = dateFormatter.formatDateToDisplayable(filledDate)!!
-            val tasksForDate = taskDisplayableMapper.mapListFromBusinessModel(
-                filterTasksForDate(
-                    filledDate,
-                    tasksList
-                )
-            )
-            val sortedTasks = tasksForDate
-                .sortedWith(compareBy<TaskDisplayable> { it.priority }.thenBy { it.hour } )
-            result.add(
-                SingleDayDataDTO(dateString, sortedTasks)
-            )
-        }
-
-        return UseCaseResult.Success(result)
     }
 
     private fun filterTasksForDate(date: Date, tasksList: List<Task>): List<Task> {

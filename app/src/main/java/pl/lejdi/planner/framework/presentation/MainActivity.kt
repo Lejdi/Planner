@@ -18,7 +18,6 @@ import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.framework.presentation.common.navigation.FAB_EXPLODE_ANIMATION_KEY
 import pl.lejdi.planner.framework.presentation.common.navigation.NO_ANIMATION
 import pl.lejdi.planner.framework.presentation.common.navigation.NavTypes
-import pl.lejdi.planner.framework.presentation.common.navigation.REFRESH_DASHBOARD_KEY
 import pl.lejdi.planner.framework.presentation.common.ui.styling.PlannerTheme
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreen
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenRoute
@@ -45,14 +44,13 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = DashboardScreenRoute,
                     ) {
-                        composable<DashboardScreenRoute> { backStackEntry ->
+                        composable<DashboardScreenRoute> {
                             DashboardScreen(
                                 navigateToDetails = { task ->
                                     navController.navigate(
                                         EditTaskScreenRoute(task)
                                     )
                                 },
-                                refreshScreen = backStackEntry.savedStateHandle.get<Boolean>(REFRESH_DASHBOARD_KEY) ?: false,
                                 animatedVisibilityScope = this
                             )
                         }
@@ -63,10 +61,7 @@ class MainActivity : ComponentActivity() {
                             val animationKey = if(args.taskDetails == null) FAB_EXPLODE_ANIMATION_KEY else NO_ANIMATION
                             EditTaskScreen(
                                 taskDetails = args.taskDetails,
-                                navigateBack = { refresh ->
-                                    navController.previousBackStackEntry
-                                        ?.savedStateHandle
-                                        ?.set(REFRESH_DASHBOARD_KEY, refresh)
+                                navigateBack = {
                                     navController.navigateUp()
                                 },
                                 modifier = Modifier

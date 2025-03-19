@@ -13,7 +13,6 @@ class DashboardContract  {
     sealed class Event : ViewEvent {
         data class EditButtonClicked(val task: TaskDisplayable) : Event()
         data class CompleteButtonClicked(val task: TaskDisplayable) : Event()
-        data object RefreshTasks : Event()
         data object AddButtonClicked: Event()
         data object DeleteOutdatedTasks: Event()
     }

@@ -6,7 +6,6 @@ import io.cucumber.java.en.Then
 import kotlinx.coroutines.runBlocking
 import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreInteractor
 import pl.lejdi.planner.business.data.cache.tasksdatesource.MockTasksDataSource
-import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.steps.BaseSteps
 import pl.lejdi.planner.test.ComposeRuleHolder
 import javax.inject.Inject
@@ -27,11 +26,8 @@ class CacheCleanupSteps(composeRuleHolder: ComposeRuleHolder) : BaseSteps(compos
 
     @Then("tasks saved in cache are")
     fun tasksSavedInCacheAre(tasksIds: List<String>) {
-        runBlocking {
-            val result = MockTasksDataSource.getAllTasks()
-            val savedTasks = (result as CacheResult.Success).data
-            assert(savedTasks.all { savedTask -> tasksIds.contains(savedTask.id.toString()) })
-        }
+        val savedTasks = MockTasksDataSource.peekTasks()
+        assert(savedTasks.all { savedTask -> tasksIds.contains(savedTask.id.toString()) })
     }
 
 }

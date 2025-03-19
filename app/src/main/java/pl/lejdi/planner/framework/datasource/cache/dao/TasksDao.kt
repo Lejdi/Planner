@@ -6,13 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntity
 
 @Dao
 interface TasksDao {
     @Query("SELECT * FROM tasks")
     @Throws(Exception::class)
-    suspend fun getAllTasks(): List<TaskEntity>
+    fun getAllTasks(): Flow<List<TaskEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     @Throws(Exception::class)

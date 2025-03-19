@@ -2,6 +2,7 @@ package pl.lejdi.planner.framework.presentation.dashboard
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import pl.lejdi.planner.business.usecases.UseCaseResult
 import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
 import pl.lejdi.planner.framework.presentation.common.BaseViewModel
@@ -16,6 +17,35 @@ class DashboardViewModel @Inject constructor(
 ) : BaseViewModel<DashboardContract.Event, DashboardContract.State, DashboardContract.Effect>() {
 
     init {
+        dashboardUseCases.getTasksForDashboard(
+            params = Unit,
+            scope = viewModelScope,
+            onResult = { result ->
+                setState {
+                    copy(
+                        isLoading = false,
+                    )
+                }
+                if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
+                else{
+                    viewModelScope.launch {
+                        result.getOrNull()?.collect{ useCaseResult ->
+                            when(useCaseResult){
+                                is UseCaseResult.Error -> errorsQueue.addError(useCaseResult.error)
+                                is UseCaseResult.Success -> {
+                                    setState {
+                                        copy(
+                                            daysTasksMap = useCaseResult.data
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        )
+
         sendEvent(DashboardContract.Event.DeleteOutdatedTasks)
     }
 
@@ -29,39 +59,6 @@ class DashboardViewModel @Inject constructor(
 
     override fun sendEvent(event: DashboardContract.Event) {
         when(event){
-            is DashboardContract.Event.RefreshTasks -> {
-                setState {
-                    copy(
-                        isLoading = true
-                    )
-                }
-                dashboardUseCases.getTasksForDashboard(
-                    params = Unit,
-                    scope = viewModelScope,
-                    onResult = { result ->
-                        setState {
-                            copy(
-                                isLoading = false,
-                            )
-                        }
-                        if(result.isFailure) errorsQueue.addError(ErrorType.Unknown)
-                        else{
-                            result.getOrNull()?.let { useCaseResult ->
-                                when(useCaseResult){
-                                    is UseCaseResult.Error -> errorsQueue.addError(useCaseResult.error)
-                                    is UseCaseResult.Success -> {
-                                        setState {
-                                            copy(
-                                                daysTasksMap = useCaseResult.data
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                )
-            }
             is DashboardContract.Event.EditButtonClicked -> {
                 setEffect {
                     DashboardContract.Effect.NavigateToDetails(taskDisplayableMapper.mapToBusinessModel(event.task))
@@ -93,7 +90,7 @@ class DashboardViewModel @Inject constructor(
                                 when(useCaseResult){
                                     is UseCaseResult.Error -> errorsQueue.addError(useCaseResult.error)
                                     is UseCaseResult.Success -> {
-                                        sendEvent(DashboardContract.Event.RefreshTasks)
+                                        //do nothing
                                     }
                                 }
                             }
@@ -103,22 +100,9 @@ class DashboardViewModel @Inject constructor(
             }
 
             DashboardContract.Event.DeleteOutdatedTasks -> {
-                setState {
-                    copy(
-                        isLoading = true
-                    )
-                }
                 dashboardUseCases.deleteOutdatedTasks(
                     params = Unit,
-                    scope = viewModelScope,
-                    onResult = { _ ->
-                        setState {
-                            copy(
-                                isLoading = false,
-                            )
-                        }
-                        sendEvent(DashboardContract.Event.RefreshTasks)
-                    }
+                    scope = viewModelScope
                 )
             }
         }

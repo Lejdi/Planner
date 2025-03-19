@@ -42,7 +42,6 @@ object DashboardScreenRoute
 @Composable
 fun SharedTransitionScope.DashboardScreen(
     navigateToDetails: (Task?) -> Unit,
-    refreshScreen: Boolean,
     viewModel: DashboardViewModel = hiltViewModel(),
     animatedVisibilityScope: AnimatedVisibilityScope
 ) = BaseScreen(
@@ -57,11 +56,6 @@ fun SharedTransitionScope.DashboardScreen(
                 }
             }
         }.collect()
-    }
-    LaunchedEffect(refreshScreen) {
-        if(refreshScreen) {
-            viewModel.sendEvent(DashboardContract.Event.RefreshTasks)
-        }
     }
     Scaffold(
         floatingActionButton = {
