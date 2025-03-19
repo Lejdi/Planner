@@ -81,14 +81,12 @@ fun TaskCard(
                     )
                 }
             }
-            task.description?.let {
-                Text(
-                    text = it,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .testTag(TASK_CARD_DESCRIPTION)
-                )
-            }
+            Text(
+                text = task.description ?: "",
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .testTag(TASK_CARD_DESCRIPTION)
+            )
             if (shouldBeExpanded) {
                 Row(
                     modifier = Modifier

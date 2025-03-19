@@ -66,12 +66,7 @@ class DashboardSteps(composeRuleHolder: ComposeRuleHolder) : BaseSteps(composeRu
 
                         get(index).onChildren().apply {
                             filterToOne(hasTestTag(TASK_CARD_NAME)).assert(hasText(taskName))
-                            if(taskDescription == null){
-                                filterToOne(hasTestTag(TASK_CARD_DESCRIPTION)).assertDoesNotExist()
-                            }
-                            else{
-                                filterToOne(hasTestTag(TASK_CARD_DESCRIPTION)).assert(hasText(taskDescription))
-                            }
+                            filterToOne(hasTestTag(TASK_CARD_DESCRIPTION)).assert(hasText(taskDescription ?: ""))
                             if(hour == null){
                                 filterToOne(hasTestTag(TASK_CARD_HOUR)).assertDoesNotExist()
                             }

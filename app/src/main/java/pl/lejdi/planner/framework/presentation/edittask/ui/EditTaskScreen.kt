@@ -226,7 +226,7 @@ fun EditTaskScreen(
                                 val task = Task(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
-                                    description = taskDescription.ifEmpty { null },
+                                    description = taskDescription,
                                     startDate = if(isAsap) dateUtil.getToday() else selectedStartDate,
                                     endDate = selectedEndDate,
                                     hour = selectedTime,
