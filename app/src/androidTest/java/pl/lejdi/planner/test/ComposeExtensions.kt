@@ -14,7 +14,7 @@ fun SemanticsNodeInteraction.swipeToChildWithText(text: String, check: Semantics
 
     while (retryCount > 0) {
         retryCount--
-        if (onChildren().filterToOne(hasAnyChild(hasText(text))).isDisplayed()) {
+        if (onChildren().filterToOne(hasAnyChild(hasText(text))).onChildren().filterToOne(hasText(text)).isDisplayed()) {
             check()
             return
         } else {
