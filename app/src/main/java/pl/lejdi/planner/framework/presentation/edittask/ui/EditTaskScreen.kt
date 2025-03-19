@@ -222,6 +222,7 @@ fun EditTaskScreen(
                         onClick = {
                             if (formValidator.validate()) {
                                 val isAsap = selectedRadio == EditTaskRadioButton.ASAP
+                                val isPeriodic = selectedRadio == EditTaskRadioButton.PERIODIC
                                 val task = Task(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
@@ -229,7 +230,7 @@ fun EditTaskScreen(
                                     startDate = if(isAsap) dateUtil.getToday() else selectedStartDate,
                                     endDate = selectedEndDate,
                                     hour = selectedTime,
-                                    daysInterval = if(isAsap) 0 else daysInterval.value ?: 0,
+                                    daysInterval = if(isPeriodic) daysInterval.value ?: 0 else 0,
                                     asap = isAsap
                                 )
                                 val event = if (taskDetails == null) {
