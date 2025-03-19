@@ -10,7 +10,6 @@ import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.business.utils.date.format.DateFormatter
 import pl.lejdi.planner.business.utils.date.addDays
 import pl.lejdi.planner.business.utils.date.daysSinceDate
-import pl.lejdi.planner.business.utils.date.isToday
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.SingleDayDataDTO
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
@@ -61,7 +60,7 @@ class GetTasksForDashboard(
             val daysFromTheStart = date.daysSinceDate(task.startDate)
             val daysSinceTheEnd = task.endDate.daysSinceDate(date)
             //asap tasks must be done "today"
-            if (task.asap && date.isToday()) {
+            if (task.asap && dateUtil.isToday(date)) {
                 filteredTasks.add(task)
                 continue
             }

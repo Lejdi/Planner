@@ -1,13 +1,8 @@
 package pl.lejdi.planner.business.utils.date
 
-import android.text.format.DateUtils
 import java.time.Duration
-import java.time.Instant
-import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 fun Date?.daysSinceDate(date: Date?): Int {
     if(this == null || date == null){
@@ -15,8 +10,6 @@ fun Date?.daysSinceDate(date: Date?): Int {
     }
     return Duration.between(this.toInstant(), date.toInstant()).toDays().toInt()
 }
-
-fun Date.isToday() = DateUtils.isToday(this.time)
 
 fun Date.addDays(days: Int) : Date {
     val calendar = Calendar.getInstance()
