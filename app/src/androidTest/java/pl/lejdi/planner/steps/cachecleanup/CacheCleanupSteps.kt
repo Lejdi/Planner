@@ -8,10 +8,11 @@ import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreI
 import pl.lejdi.planner.business.data.cache.tasksdatesource.MockTasksDataSource
 import pl.lejdi.planner.business.data.cache.util.CacheResult
 import pl.lejdi.planner.steps.BaseSteps
+import pl.lejdi.planner.test.ComposeRuleHolder
 import javax.inject.Inject
 
 @HiltAndroidTest
-class CacheCleanupSteps : BaseSteps() {
+class CacheCleanupSteps(composeRuleHolder: ComposeRuleHolder) : BaseSteps(composeRuleHolder) {
 
     @Inject
     lateinit var lastCacheCleanupDataStoreInteractor: LastCacheCleanupDataStoreInteractor

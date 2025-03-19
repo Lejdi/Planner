@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @WithJunitRule(useAsTestClassInDescription = true)
 @HiltAndroidTest
-open class BaseSteps: SemanticsNodeInteractionsProvider by ComposeRuleHolder.composeRule {
+open class BaseSteps(composeRuleHolder: ComposeRuleHolder): SemanticsNodeInteractionsProvider by composeRuleHolder.composeRule {
 
     private val testDateFormat = "dd.MM.yyyy"
     val mockDateFormatter: SimpleDateFormat = SimpleDateFormat(testDateFormat, Locale.ENGLISH)
@@ -21,5 +21,5 @@ open class BaseSteps: SemanticsNodeInteractionsProvider by ComposeRuleHolder.com
     lateinit var businessDateFormatter: DateFormatter
 
     @get:Rule
-    val composeRule = ComposeRuleHolder.composeRule
+    val composeRule = composeRuleHolder.composeRule
 }

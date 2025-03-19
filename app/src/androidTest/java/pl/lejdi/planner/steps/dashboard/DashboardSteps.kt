@@ -28,9 +28,10 @@ import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TAS
 import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_NAME
 import pl.lejdi.planner.test.swipeToChildWithText
 import io.cucumber.java.en.When
+import pl.lejdi.planner.test.ComposeRuleHolder
 
 @HiltAndroidTest
-class DashboardSteps: BaseSteps() {
+class DashboardSteps(composeRuleHolder: ComposeRuleHolder) : BaseSteps(composeRuleHolder) {
 
     @Then("user sees no tasks on day {string}")
     fun userSeesNoTasksOnDay(date: String) {

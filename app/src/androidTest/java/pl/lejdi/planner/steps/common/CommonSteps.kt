@@ -11,9 +11,10 @@ import pl.lejdi.planner.business.util.date.MockDateUtil
 import pl.lejdi.planner.framework.presentation.MainActivity
 import pl.lejdi.planner.steps.BaseSteps
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntity
+import pl.lejdi.planner.test.ComposeRuleHolder
 
 @HiltAndroidTest
-class CommonSteps : BaseSteps() {
+class CommonSteps(composeRuleHolder: ComposeRuleHolder) : BaseSteps(composeRuleHolder) {
 
     @And("current date is {string}")
     fun currentDateIs(date: String) {
@@ -22,7 +23,7 @@ class CommonSteps : BaseSteps() {
 
     @Given("user has no saved tasks")
     fun userHasNoSavedTasks(){
-        MockTasksDataSource.setupMockList(emptyList())
+        MockTasksDataSource.clearList()
     }
 
     @When("user launches the application")
@@ -32,6 +33,7 @@ class CommonSteps : BaseSteps() {
 
     @And("the user has saved tasks")
     fun theUserHasSavedTasks(tasksList: DataTable) {
+        MockTasksDataSource.clearList()
         MockTasksDataSource.setupMockList(
             tasksList.asMaps().map {
                 TaskEntity(

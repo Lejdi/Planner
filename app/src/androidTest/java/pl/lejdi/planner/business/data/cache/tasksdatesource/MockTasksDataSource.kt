@@ -10,6 +10,10 @@ object MockTasksDataSource : TasksDataSource {
         tasksList.addAll(mockedTasks)
     }
 
+    fun clearList(){
+        tasksList.clear()
+    }
+
     private val tasksList = mutableListOf<TaskEntity>()
 
     override suspend fun getAllTasks(): CacheResult<List<TaskEntity>> {

@@ -5,7 +5,7 @@ import io.cucumber.junit.WithJunitRule
 import org.junit.Rule
 
 @WithJunitRule
-object ComposeRuleHolder {
+class ComposeRuleHolder {
     @get:Rule
-    val composeRule = createEmptyComposeRule()
+    var composeRule = createEmptyComposeRule()
 }
