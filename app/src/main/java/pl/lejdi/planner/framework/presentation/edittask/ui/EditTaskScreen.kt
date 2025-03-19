@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,14 @@ import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.FormVa
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.NotEmptyValidation
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskContract
 import pl.lejdi.planner.framework.presentation.edittask.EditTaskViewModel
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_DELETE_BUTTON
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_END_DATE_FIELD
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_HOUR_FIELD
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_SAVE_BUTTON
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_START_DATE_FIELD
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_TASK_DESCRIPTION_FIELD
+import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_TASK_NAME_FIELD
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskFormHelper
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskRadioButton
 
@@ -83,7 +92,10 @@ fun EditTaskScreen(
         var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: dateUtil.getToday()) }
         var selectedEndDate by remember { mutableStateOf(taskDetails?.endDate) }
         var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
-        val daysInterval = remember { mutableStateOf(taskDetails?.daysInterval) }
+        val daysInterval = remember {
+            val savedInterval = taskDetails?.daysInterval
+            mutableStateOf(if(savedInterval == 0) null else savedInterval)
+        }
 
         val initialSelectedRadio = EditTaskFormHelper.getSelectedRadioForTask(taskDetails)
         val (selectedRadio, onRadioSelect) = remember { mutableStateOf(initialSelectedRadio) }
@@ -97,6 +109,7 @@ fun EditTaskScreen(
                     )
                     .padding(contentPadding)
                     .padding(16.dp)
+                    .testTag(EDIT_TASK_SCREEN)
             ) {
                 Column(
                     modifier = Modifier
@@ -112,7 +125,9 @@ fun EditTaskScreen(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done
                         ),
-                        validation = formValidator.addValidation(NotEmptyValidation)
+                        validation = formValidator.addValidation(NotEmptyValidation),
+                        modifier = Modifier
+                            .testTag(EDIT_TASK_SCREEN_TASK_NAME_FIELD)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     FormTextField(
@@ -122,6 +137,8 @@ fun EditTaskScreen(
                         },
                         label = stringResource(R.string.task_description_label),
                         minLines = 3,
+                        modifier = Modifier
+                            .testTag(EDIT_TASK_SCREEN_TASK_DESCRIPTION_FIELD)
                     )
                     RadioButtonsContainer(
                         selectedRadio = selectedRadio,
@@ -148,13 +165,17 @@ fun EditTaskScreen(
                                     }
                                 },
                                 initialDate = selectedStartDate,
+                                modifier = Modifier
+                                    .testTag(EDIT_TASK_SCREEN_START_DATE_FIELD)
                             )
                             TimePickerField(
                                 initialTime = selectedTime,
                                 onTimeSelected = {
                                     selectedTime = it
                                 },
-                                label = stringResource(R.string.hour_label)
+                                label = stringResource(R.string.hour_label),
+                                modifier = Modifier
+                                    .testTag(EDIT_TASK_SCREEN_HOUR_FIELD)
                             )
                         }
                     }
@@ -173,7 +194,9 @@ fun EditTaskScreen(
                                 override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                                     return utcTimeMillis > selectedStartDate.time
                                 }
-                            }
+                            },
+                            modifier = Modifier
+                                .testTag(EDIT_TASK_SCREEN_END_DATE_FIELD)
                         )
                     }
                 }
@@ -191,7 +214,9 @@ fun EditTaskScreen(
                             } else {
                                 viewModel.sendEvent(EditTaskContract.Event.DeleteTask(taskDetails))
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .testTag(EDIT_TASK_SCREEN_DELETE_BUTTON)
                     ) { Text(stringResource(R.string.delete_button)) }
                     Button(
                         onClick = {
@@ -200,7 +225,7 @@ fun EditTaskScreen(
                                 val task = Task(
                                     id = taskDetails?.id ?: 0,
                                     name = taskName,
-                                    description = taskDescription,
+                                    description = taskDescription.ifEmpty { null },
                                     startDate = if(isAsap) dateUtil.getToday() else selectedStartDate,
                                     endDate = selectedEndDate,
                                     hour = selectedTime,
@@ -214,10 +239,23 @@ fun EditTaskScreen(
                                 }
                                 viewModel.sendEvent(event)
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .testTag(EDIT_TASK_SCREEN_SAVE_BUTTON)
                     ) { Text(stringResource(R.string.save_button)) }
                 }
             }
         }
     }
+}
+
+object EditTaskScreenTestTags{
+    const val EDIT_TASK_SCREEN = "EditTaskScreen"
+    const val EDIT_TASK_SCREEN_SAVE_BUTTON = "EditTaskScreen.Button.Save"
+    const val EDIT_TASK_SCREEN_DELETE_BUTTON = "EditTaskScreen.Button.Delete"
+    const val EDIT_TASK_SCREEN_TASK_NAME_FIELD = "EditTaskScreen.Field.TaskName"
+    const val EDIT_TASK_SCREEN_TASK_DESCRIPTION_FIELD = "EditTaskScreen.Field.TaskDescription"
+    const val EDIT_TASK_SCREEN_START_DATE_FIELD = "EditTaskScreen.Field.StartDate"
+    const val EDIT_TASK_SCREEN_END_DATE_FIELD = "EditTaskScreen.Field.EndDate"
+    const val EDIT_TASK_SCREEN_HOUR_FIELD = "EditTaskScreen.Field.Hour"
 }

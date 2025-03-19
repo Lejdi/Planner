@@ -19,11 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.R
+import pl.lejdi.planner.framework.presentation.edittask.ui.RadioButtonsContainerTestTags.RADIO_BUTTON_CONTAINER_BUTTON
+import pl.lejdi.planner.framework.presentation.edittask.ui.RadioButtonsContainerTestTags.RADIO_BUTTON_CONTAINER_INTERVAL_FIELD
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskRadioButton
 
 @Composable
@@ -52,7 +55,9 @@ fun RadioButtonsContainer(
                 ) {
                     RadioButton(
                         selected = radioSelected,
-                        onClick = { onRadioSelect(radioButtonOption) }
+                        onClick = { onRadioSelect(radioButtonOption) },
+                        modifier = Modifier
+                            .testTag(RADIO_BUTTON_CONTAINER_BUTTON)
                     )
                     Text(
                         text = stringResource(radioButtonOption.description),
@@ -98,7 +103,9 @@ fun AdditionalRadioComponents(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.width(64.dp)
+                    modifier = Modifier
+                        .width(64.dp)
+                        .testTag(RADIO_BUTTON_CONTAINER_INTERVAL_FIELD)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(stringResource(R.string.days))
@@ -106,4 +113,9 @@ fun AdditionalRadioComponents(
         }
         else -> {}
     }
+}
+
+object RadioButtonsContainerTestTags{
+    const val RADIO_BUTTON_CONTAINER_BUTTON = "RadioButtonContainer.Button"
+    const val RADIO_BUTTON_CONTAINER_INTERVAL_FIELD = "RadioButtonContainer.Field.Interval"
 }

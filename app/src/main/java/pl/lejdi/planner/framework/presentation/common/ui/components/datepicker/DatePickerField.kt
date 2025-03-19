@@ -29,7 +29,8 @@ fun DatePickerField(
     label: String,
     onDateSelected: (Date?) -> Unit,
     initialDate: Date? = null,
-    selectableDates: SelectableDates = DatePickerDefaults.AllDates
+    selectableDates: SelectableDates = DatePickerDefaults.AllDates,
+    modifier: Modifier = Modifier
 ) {
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -37,7 +38,9 @@ fun DatePickerField(
         initialSelectedDateMillis = initialDate?.let { getInitialTime(it) }
     )
 
-    Box{
+    Box(
+        modifier = modifier
+    ){
         OutlinedTextField(
             enabled = false,
             modifier = Modifier

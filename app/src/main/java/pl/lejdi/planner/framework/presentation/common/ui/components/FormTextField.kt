@@ -13,8 +13,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextFieldTestTags.FORM_TEXT_FIELD_ERROR_MESSAGE
+import pl.lejdi.planner.framework.presentation.common.ui.components.FormTextFieldTestTags.FORM_TEXT_FIELD_INPUT
 import pl.lejdi.planner.framework.presentation.common.ui.utils.validation.Validation
 
 @Composable
@@ -52,6 +55,7 @@ fun FormTextField(
             singleLine = singleLine,
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag(FORM_TEXT_FIELD_INPUT)
         )
         if(isError){
             validation?.getErrorMessage()?.let {
@@ -61,8 +65,15 @@ fun FormTextField(
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.error
                     ),
+                    modifier = Modifier
+                        .testTag(FORM_TEXT_FIELD_ERROR_MESSAGE)
                 )
             }
         }
     }
+}
+
+object FormTextFieldTestTags{
+    const val FORM_TEXT_FIELD_INPUT = "FormTextField.Input"
+    const val FORM_TEXT_FIELD_ERROR_MESSAGE = "FormTextField.ErrorMessage"
 }

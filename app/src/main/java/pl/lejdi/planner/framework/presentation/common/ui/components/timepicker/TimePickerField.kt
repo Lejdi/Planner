@@ -27,6 +27,7 @@ fun TimePickerField(
     initialTime: Time? = null,
     onTimeSelected: (Time) -> Unit,
     label: String,
+    modifier: Modifier = Modifier
 ) {
     var showTimePickerDialog by remember { mutableStateOf(false) }
     val timePickerState = rememberTimePickerState(
@@ -37,7 +38,9 @@ fun TimePickerField(
             minute = it.minute
         }
     }
-    Box{
+    Box(
+        modifier = modifier
+    ){
         OutlinedTextField(
             enabled = false,
             modifier = Modifier
