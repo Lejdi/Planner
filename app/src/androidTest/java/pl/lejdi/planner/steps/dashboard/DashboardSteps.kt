@@ -1,5 +1,6 @@
 package pl.lejdi.planner.steps.dashboard
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -11,10 +12,16 @@ import androidx.compose.ui.test.onNodeWithTag
 import io.cucumber.java.en.Then
 import pl.lejdi.planner.steps.BaseSteps
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.And
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_FAB_TEST_TAG
 import pl.lejdi.planner.framework.presentation.dashboard.ui.DashboardScreenTestTags.DASHBOARD_TASKS_PAGER_TAG
 import pl.lejdi.planner.framework.presentation.dashboard.ui.SingleDayViewTestTags.SINGLE_DAY_TASKS_COLUMN_TAG
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_COMPLETE_BUTTON
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_DESCRIPTION
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_EDIT_BUTTON
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_HOUR
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_NAME
 import pl.lejdi.planner.test.swipeToChildWithText
 
 @HiltAndroidTest
@@ -35,5 +42,49 @@ class DashboardSteps: BaseSteps() {
     @And("add task button is visible")
     fun addTaskButtonIsVisible() {
         onNodeWithTag(DASHBOARD_FAB_TEST_TAG).assertIsDisplayed()
+    }
+
+    @And("user sees tasks on day {string}")
+    fun userSeesTasksOnDay(date: String, taskCards: DataTable) {
+        val dateString = businessDateFormatter.formatDateToDisplayable(mockDateFormatter.parse(date))
+
+        onNodeWithTag(DASHBOARD_TASKS_PAGER_TAG, useUnmergedTree = true).swipeToChildWithText(dateString!!) {
+            onChildren().filterToOne(hasAnyChild(hasText(dateString))).apply {
+                assertIsDisplayed()
+                onChildren().filterToOne(hasTestTag(SINGLE_DAY_TASKS_COLUMN_TAG)).onChildren().apply {
+                    taskCards.asMaps().forEachIndexed { index, entries ->
+                        val taskName = entries["taskName"]!!
+                        val taskDescription = entries["taskDescription"]
+                        val hour = entries["hour"]
+                        val buttonsVisible = entries["buttonsVisible"] == "yes"
+
+                        get(index).onChildren().apply {
+                            filterToOne(hasTestTag(TASK_CARD_NAME)).assert(hasText(taskName))
+                            if(taskDescription == null){
+                                filterToOne(hasTestTag(TASK_CARD_DESCRIPTION)).assertDoesNotExist()
+                            }
+                            else{
+                                filterToOne(hasTestTag(TASK_CARD_DESCRIPTION)).assert(hasText(taskDescription))
+                            }
+                            if(hour == null){
+                                filterToOne(hasTestTag(TASK_CARD_HOUR)).assertDoesNotExist()
+                            }
+                            else{
+                                filterToOne(hasTestTag(TASK_CARD_HOUR)).assert(hasText(hour))
+                            }
+                            if(buttonsVisible){
+                                filterToOne(hasTestTag(TASK_CARD_COMPLETE_BUTTON)).assertIsDisplayed()
+                                filterToOne(hasTestTag(TASK_CARD_EDIT_BUTTON)).assertIsDisplayed()
+                            }
+                            else{
+
+                                filterToOne(hasTestTag(TASK_CARD_COMPLETE_BUTTON)).assertDoesNotExist()
+                                filterToOne(hasTestTag(TASK_CARD_EDIT_BUTTON)).assertDoesNotExist()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

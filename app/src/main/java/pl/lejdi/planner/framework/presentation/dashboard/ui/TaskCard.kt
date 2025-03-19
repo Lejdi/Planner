@@ -20,12 +20,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.R
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayable
 import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_COMPLETE_BUTTON
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_DESCRIPTION
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_EDIT_BUTTON
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_HOUR
+import pl.lejdi.planner.framework.presentation.dashboard.ui.TaskCardTestTags.TASK_CARD_NAME
 
 @Composable
 fun TaskCard(
@@ -34,7 +40,7 @@ fun TaskCard(
     onEditClick: (TaskDisplayable) -> Unit,
     onCompleteClick: (TaskDisplayable) -> Unit,
     onTaskClick: (TaskDisplayable) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val shouldBeExpanded = task.id == expandedTaskId
     Card(
@@ -64,18 +70,23 @@ fun TaskCard(
                     ),
                     modifier = Modifier
                         .weight(1.0f)
+                        .testTag(TASK_CARD_NAME)
                 )
                 task.hour?.let {
                     Text(
                         text = it,
-                        modifier = Modifier.padding(start = 4.dp)
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .testTag(TASK_CARD_HOUR)
                     )
                 }
             }
             task.description?.let {
                 Text(
                     text = it,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .testTag(TASK_CARD_DESCRIPTION)
                 )
             }
             if (shouldBeExpanded) {
@@ -88,7 +99,9 @@ fun TaskCard(
                     Button(
                         onClick = {
                             onEditClick(task)
-                        }
+                        },
+                        modifier = Modifier
+                            .testTag(TASK_CARD_EDIT_BUTTON)
                     ) {
                         Text(stringResource(R.string.edit_button))
                         Spacer(modifier = Modifier.width(4.dp))
@@ -97,7 +110,9 @@ fun TaskCard(
                     Button(
                         onClick = {
                             onCompleteClick(task)
-                        }
+                        },
+                        modifier = Modifier
+                            .testTag(TASK_CARD_COMPLETE_BUTTON)
                     ) {
                         Text(stringResource(R.string.complete_button))
                         Spacer(modifier = Modifier.width(4.dp))
@@ -107,4 +122,12 @@ fun TaskCard(
             }
         }
     }
+}
+
+object TaskCardTestTags {
+    const val TASK_CARD_NAME = "TaskCard.Name"
+    const val TASK_CARD_DESCRIPTION = "TaskCard.Description"
+    const val TASK_CARD_HOUR = "TaskCard.Hour"
+    const val TASK_CARD_COMPLETE_BUTTON = "TaskCard.Button.Complete"
+    const val TASK_CARD_EDIT_BUTTON = "TaskCard.Button.Edit"
 }
