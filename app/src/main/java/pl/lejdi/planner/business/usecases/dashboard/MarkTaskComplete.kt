@@ -30,7 +30,7 @@ class MarkTaskComplete(
             if(task.endDate != null){
                 val daysFromStartToEnd = newStartDate.daysSinceDate(task.endDate)
                 //the last occurrence of periodic task - delete
-                if (daysFromStartToEnd < 1) {
+                if (daysFromStartToEnd < 0) {
                     cacheResult = deleteTask(task)
                 }
                 else{
