@@ -8,7 +8,14 @@ fun Date?.daysSinceDate(date: Date?): Int {
     if(this == null || date == null){
         return -1
     }
-    return Duration.between(this.toInstant(), date.toInstant()).toDays().toInt()
+    val thisCalendar = Calendar.getInstance()
+    thisCalendar.time = this
+    thisCalendar.add(Calendar.MILLISECOND, thisCalendar[Calendar.DST_OFFSET] )
+
+    val dateCalendar = Calendar.getInstance()
+    dateCalendar.time = date
+    dateCalendar.add(Calendar.MILLISECOND, dateCalendar[Calendar.DST_OFFSET])
+    return Duration.between(thisCalendar.toInstant(), dateCalendar.toInstant()).toDays().toInt()
 }
 
 fun Date.addDays(days: Int) : Date {
