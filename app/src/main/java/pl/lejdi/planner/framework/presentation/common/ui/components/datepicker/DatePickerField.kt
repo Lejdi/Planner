@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import pl.lejdi.planner.business.utils.date.setNoon
 import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
 import java.util.Calendar
 import java.util.Date
@@ -66,7 +67,9 @@ fun DatePickerField(
                     showDatePickerDialog = false
                 },
                 applyDate = {
-                    onDateSelected(datePickerState.selectedDateMillis?.let { Date(it) })
+                    onDateSelected(datePickerState.selectedDateMillis?.let {
+                        Date(it).setNoon()
+                    })
                 },
                 state = datePickerState
             )

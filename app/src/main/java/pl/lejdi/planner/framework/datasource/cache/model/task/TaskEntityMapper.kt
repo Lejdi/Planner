@@ -3,6 +3,7 @@ package pl.lejdi.planner.framework.datasource.cache.model.task
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.util.ModelMapper
 import pl.lejdi.planner.business.utils.date.format.DateFormatter
+import pl.lejdi.planner.business.utils.date.setNoon
 
 class TaskEntityMapper(
     private val dateFormatter: DateFormatter
@@ -12,8 +13,8 @@ class TaskEntityMapper(
             id = frameworkModel.id,
             name = frameworkModel.name,
             description = frameworkModel.description,
-            startDate = dateFormatter.dateFromCacheFormat(frameworkModel.startDate)!!, // surely not null - startDate cannot be null in framework model
-            endDate = dateFormatter.dateFromCacheFormat(frameworkModel.endDate),
+            startDate = dateFormatter.dateFromCacheFormat(frameworkModel.startDate)!!.setNoon(), // surely not null - startDate cannot be null in framework model
+            endDate = dateFormatter.dateFromCacheFormat(frameworkModel.endDate)?.setNoon(),
             daysInterval = frameworkModel.daysInterval,
             hour = dateFormatter.timeFromStringFormat(frameworkModel.hour),
             asap = frameworkModel.asap
