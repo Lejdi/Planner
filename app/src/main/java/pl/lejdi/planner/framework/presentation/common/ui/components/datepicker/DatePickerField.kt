@@ -20,23 +20,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import pl.lejdi.planner.business.utils.date.setNoon
 import pl.lejdi.planner.framework.presentation.common.ui.utils.clickableWithoutRipple
-import java.util.Calendar
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerField(
+    modifier: Modifier = Modifier,
     value: String,
     label: String,
     onDateSelected: (Date?) -> Unit,
     initialDate: Date? = null,
     selectableDates: SelectableDates = DatePickerDefaults.AllDates,
-    modifier: Modifier = Modifier
 ) {
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
         selectableDates = selectableDates,
-        initialSelectedDateMillis = initialDate?.let { getInitialTime(it) }
+        initialSelectedDateMillis = initialDate?.time
     )
 
     Box(
@@ -75,12 +74,4 @@ fun DatePickerField(
             )
         }
     }
-
-}
-
-//initial time in datepicker is set to UTC - for different time zones the selected date might differ
-private fun getInitialTime(initialDate : Date) : Long{
-    val calendar = Calendar.getInstance()
-    calendar.time = initialDate
-    return calendar.timeInMillis + calendar.timeZone.rawOffset
 }
