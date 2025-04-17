@@ -3,6 +3,7 @@ package pl.lejdi.planner.framework.presentation.common.model.task
 import pl.lejdi.planner.business.data.model.Task
 import pl.lejdi.planner.business.data.util.ModelMapper
 import pl.lejdi.planner.business.utils.date.format.DateFormatter
+import pl.lejdi.planner.business.utils.date.setNoon
 
 class TaskDisplayableMapper(
     private val dateFormatter: DateFormatter
@@ -12,8 +13,8 @@ class TaskDisplayableMapper(
             id = frameworkModel.id,
             name = frameworkModel.name,
             description = frameworkModel.description,
-            startDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.startDate)!!, // surely not null - startDate cannot be null in framework model
-            endDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.endDate),
+            startDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.startDate)!!.setNoon(), // surely not null - startDate cannot be null in framework model
+            endDate = dateFormatter.dateFromDisplayableFormat(frameworkModel.endDate)?.setNoon(),
             daysInterval = frameworkModel.daysInterval.toInt(),
             hour = dateFormatter.timeFromStringFormat(frameworkModel.hour),
             asap = frameworkModel.asap
