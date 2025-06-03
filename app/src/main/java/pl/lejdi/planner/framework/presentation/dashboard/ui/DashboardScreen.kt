@@ -88,7 +88,7 @@ fun SharedTransitionScope.DashboardScreen(
                 contentPadding = PaddingValues(horizontal = 32.dp),
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier
-                    .padding(contentPadding)
+                    .padding(top = contentPadding.calculateTopPadding())
                     .testTag(DASHBOARD_TASKS_PAGER_TAG)
             ) { page ->
                 val (date, tasksList) = viewModel.viewState.value.daysTasksMap[page]

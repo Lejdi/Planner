@@ -107,7 +107,7 @@ fun EditTaskScreen(
                     .background(
                         color = MaterialTheme.colorScheme.secondaryContainer
                     )
-                    .padding(contentPadding)
+                    .padding(top = contentPadding.calculateTopPadding())
                     .padding(16.dp)
                     .testTag(EDIT_TASK_SCREEN)
             ) {
