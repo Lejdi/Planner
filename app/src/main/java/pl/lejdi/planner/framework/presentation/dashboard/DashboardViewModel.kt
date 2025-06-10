@@ -100,7 +100,7 @@ class DashboardViewModel @Inject constructor(
             }
 
             DashboardContract.Event.DeleteOutdatedTasks -> {
-                dashboardUseCases.deleteOutdatedTasks(
+                dashboardUseCases.updateTasksDates(
                     params = Unit,
                     scope = viewModelScope
                 )

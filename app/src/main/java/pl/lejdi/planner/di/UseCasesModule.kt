@@ -11,7 +11,7 @@ import pl.lejdi.planner.business.usecases.edittask.AddTask
 import pl.lejdi.planner.business.usecases.edittask.DeleteTask
 import pl.lejdi.planner.business.usecases.edittask.EditTask
 import pl.lejdi.planner.business.usecases.edittask.EditTaskUseCases
-import pl.lejdi.planner.business.usecases.dashboard.DeleteOutdatedTasks
+import pl.lejdi.planner.business.usecases.dashboard.UpdateTasksDates
 import pl.lejdi.planner.business.usecases.dashboard.GetTasksForDashboard
 import pl.lejdi.planner.business.usecases.dashboard.MarkTaskComplete
 import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
@@ -68,8 +68,8 @@ object UseCasesModule {
         taskEntityMapper: TaskEntityMapper,
         lastCacheCleanupDataStoreInteractor: LastCacheCleanupDataStoreInteractor,
         dateUtil: DateUtil
-    ) : DeleteOutdatedTasks {
-        return DeleteOutdatedTasks(
+    ) : UpdateTasksDates {
+        return UpdateTasksDates(
             tasksDataSource = tasksDataSource,
             taskEntityMapper = taskEntityMapper,
             lastCacheCleanupDataStoreInteractor = lastCacheCleanupDataStoreInteractor,
@@ -126,12 +126,12 @@ object UseCasesModule {
     @ViewModelScoped
     @Provides
     fun provideDashboardUseCases(
-        deleteOutdatedTasks: DeleteOutdatedTasks,
+        updateTasksDates: UpdateTasksDates,
         markTaskComplete: MarkTaskComplete,
         getTasksForDashboard: GetTasksForDashboard
     ) : DashboardUseCases {
         return DashboardUseCases(
-            deleteOutdatedTasks = deleteOutdatedTasks,
+            updateTasksDates = updateTasksDates,
             markTaskComplete = markTaskComplete,
             getTasksForDashboard = getTasksForDashboard,
         )
