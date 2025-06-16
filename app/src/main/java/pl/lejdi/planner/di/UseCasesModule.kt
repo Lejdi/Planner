@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import pl.lejdi.planner.business.data.cache.datastore.LastCacheCleanupDataStoreInteractor
+import pl.lejdi.planner.business.data.cache.grocery.GroceryItemDataSource
 import pl.lejdi.planner.business.data.cache.tasksdatasource.TasksDataSource
 import pl.lejdi.planner.business.usecases.edittask.AddTask
 import pl.lejdi.planner.business.usecases.edittask.DeleteTask
@@ -15,9 +16,16 @@ import pl.lejdi.planner.business.usecases.dashboard.UpdateTasksDates
 import pl.lejdi.planner.business.usecases.dashboard.GetTasksForDashboard
 import pl.lejdi.planner.business.usecases.dashboard.MarkTaskComplete
 import pl.lejdi.planner.business.usecases.dashboard.DashboardUseCases
+import pl.lejdi.planner.business.usecases.grocery.AddGrocery
+import pl.lejdi.planner.business.usecases.grocery.DeleteGrocery
+import pl.lejdi.planner.business.usecases.grocery.EditGrocery
+import pl.lejdi.planner.business.usecases.grocery.GetAllGroceries
+import pl.lejdi.planner.business.usecases.grocery.GroceryUseCases
 import pl.lejdi.planner.business.utils.date.DateUtil
 import pl.lejdi.planner.business.utils.date.format.DateFormatter
+import pl.lejdi.planner.framework.datasource.cache.model.grocery.GroceryItemEntityMapper
 import pl.lejdi.planner.framework.datasource.cache.model.task.TaskEntityMapper
+import pl.lejdi.planner.framework.presentation.common.model.grocery.GroceryDisplayableMapper
 import pl.lejdi.planner.framework.presentation.common.model.task.TaskDisplayableMapper
 
 
@@ -134,6 +142,76 @@ object UseCasesModule {
             updateTasksDates = updateTasksDates,
             markTaskComplete = markTaskComplete,
             getTasksForDashboard = getTasksForDashboard,
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideAddGroceryUseCase(
+        groceryItemDataSource: GroceryItemDataSource,
+        groceryItemEntityMapper: GroceryItemEntityMapper,
+    ) : AddGrocery {
+        return AddGrocery(
+            groceryItemDataSource = groceryItemDataSource,
+            groceryItemEntityMapper = groceryItemEntityMapper
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideEditGroceryUseCase(
+        groceryItemDataSource: GroceryItemDataSource,
+        groceryItemEntityMapper: GroceryItemEntityMapper,
+        groceryDisplayableMapper: GroceryDisplayableMapper,
+    ) : EditGrocery {
+        return EditGrocery(
+            groceryItemDataSource = groceryItemDataSource,
+            groceryItemEntityMapper = groceryItemEntityMapper,
+            groceryDisplayableMapper = groceryDisplayableMapper
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideDeleteGroceryUseCase(
+        groceryItemDataSource: GroceryItemDataSource,
+        groceryItemEntityMapper: GroceryItemEntityMapper,
+        groceryDisplayableMapper: GroceryDisplayableMapper,
+    ) : DeleteGrocery {
+        return DeleteGrocery(
+            groceryItemDataSource = groceryItemDataSource,
+            groceryItemEntityMapper = groceryItemEntityMapper,
+            groceryDisplayableMapper = groceryDisplayableMapper
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetAllGroceriesUseCase(
+        groceryItemDataSource: GroceryItemDataSource,
+        groceryItemEntityMapper: GroceryItemEntityMapper,
+        groceryDisplayableMapper: GroceryDisplayableMapper,
+    ) : GetAllGroceries {
+        return GetAllGroceries(
+            groceryItemDataSource = groceryItemDataSource,
+            groceryItemEntityMapper = groceryItemEntityMapper,
+            groceryDisplayableMapper = groceryDisplayableMapper
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideGroceryUseCases(
+        addGrocery: AddGrocery,
+        deleteGrocery: DeleteGrocery,
+        editGrocery: EditGrocery,
+        getAllGroceries: GetAllGroceries
+    ) : GroceryUseCases {
+        return GroceryUseCases(
+            addGrocery = addGrocery,
+            deleteGrocery = deleteGrocery,
+            editGrocery = editGrocery,
+            getAllGroceries = getAllGroceries
         )
     }
 }

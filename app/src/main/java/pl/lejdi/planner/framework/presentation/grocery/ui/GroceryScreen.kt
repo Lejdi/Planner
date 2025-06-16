@@ -4,14 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.serialization.Serializable
 import pl.lejdi.planner.framework.presentation.common.ui.BaseScreen
+import pl.lejdi.planner.framework.presentation.grocery.GroceryContract
 import pl.lejdi.planner.framework.presentation.grocery.GroceryViewModel
 
 @Serializable
@@ -33,7 +35,40 @@ fun GroceryScreen(
                 )
                 .padding(top = contentPadding.calculateTopPadding())
         ) {
-            Text("This is grocery screen")
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                items(viewModel.viewState.value.groceriesList){
+                    GroceryCard(
+                        item = it,
+                        onEditClick = { groceryItem ->
+                            viewModel.sendEvent(GroceryContract.Event.GroceryEdited(groceryItem))
+                        },
+                        onCompleteClick = { groceryItem ->
+                            viewModel.sendEvent(GroceryContract.Event.GroceryCompleted(groceryItem))
+                        }
+                    )
+                }
+                item{
+                    AddGroceryView(
+                        expanded = viewModel.viewState.value.newTaskExpanded,
+                        onFabClicked = {
+                            viewModel.sendEvent(
+                                GroceryContract.Event.AddButtonClicked
+                            )
+                        },
+                        onSaveClicked = { name, description ->
+                            viewModel.sendEvent(
+                                GroceryContract.Event.SaveNewTaskClicked(
+                                    name = name,
+                                    description = description
+                                )
+                            )
+                        }
+                    )
+                }
+            }
         }
     }
 }
