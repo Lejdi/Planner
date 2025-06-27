@@ -12,8 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.serialization.Serializable
@@ -31,7 +33,8 @@ fun GroceryScreen(
     displayProgressBar = viewModel.viewState.value.isLoading,
     errorsQueue = viewModel.errorsQueue
 ) {
-    Scaffold{ contentPadding ->
+    val focusRequester = remember { FocusRequester() }
+    Scaffold { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,7 +52,7 @@ fun GroceryScreen(
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                items(viewModel.viewState.value.groceriesList){
+                items(viewModel.viewState.value.groceriesList) {
                     GroceryCard(
                         item = it,
                         onEditClick = { groceryItem ->
@@ -60,7 +63,7 @@ fun GroceryScreen(
                         }
                     )
                 }
-                item{
+                item {
                     AddGroceryView(
                         expanded = viewModel.viewState.value.newTaskExpanded,
                         onFabClicked = {
@@ -75,7 +78,8 @@ fun GroceryScreen(
                                     description = description
                                 )
                             )
-                        }
+                        },
+                        focusRequester = focusRequester
                     )
                 }
             }

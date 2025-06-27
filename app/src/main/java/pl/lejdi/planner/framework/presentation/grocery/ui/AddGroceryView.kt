@@ -3,9 +3,16 @@ package pl.lejdi.planner.framework.presentation.grocery.ui
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -18,13 +25,17 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -32,41 +43,50 @@ import androidx.compose.ui.unit.dp
 fun AddGroceryView(
     expanded: Boolean,
     onFabClicked: () -> Unit,
-    onSaveClicked: (String, String) -> Unit
+    onSaveClicked: (String, String) -> Unit,
+    focusRequester: FocusRequester
 ) {
     Column(
         modifier = Modifier
             .padding(bottom = 16.dp)
+            .animateContentSize()
     ) {
+        LaunchedEffect(expanded) {
+            if(expanded){
+                focusRequester.requestFocus()
+            }
+        }
         if (expanded) {
             Card(
                 colors = CardDefaults.cardColors().copy(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
-                modifier = Modifier
-                    .animateContentSize()
             ) {
                 var newTaskName by remember { mutableStateOf("") }
                 var newTaskDescription by remember { mutableStateOf("") }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
+                        .fillMaxHeight()
                         .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(12.dp),
+                            .defaultMinSize(minHeight = 84.dp)
+                            .weight(1f)
+                            .padding(end = 8.dp)
                     ) {
-                        OutlinedTextField(
+                        AddGroceryTextField(
                             value = newTaskName,
                             onValueChange = { newValue ->
                                 newTaskName = newValue
                             },
                             modifier = Modifier
-                                .weight(1.0f),
+                                .weight(1.0f)
+                                .defaultMinSize(minHeight = 16.dp)
+                                .focusRequester(focusRequester),
                             textStyle = LocalTextStyle.current.copy(
                                 fontWeight = FontWeight.Bold
                             ),
@@ -77,31 +97,40 @@ fun AddGroceryView(
                                         fontWeight = FontWeight.Bold
                                     ),
                                 )
-                            }
+                            },
                         )
-                        OutlinedTextField(
+                        Spacer(modifier = Modifier.height(8.dp))
+                        AddGroceryTextField(
                             value = newTaskDescription,
                             onValueChange = { newValue ->
                                 newTaskDescription = newValue
                             },
                             modifier = Modifier
-                                .weight(1.0f),
+                                .weight(1.0f)
+                                .defaultMinSize(minHeight = 64.dp)
+                                .fillMaxHeight(),
                             placeholder = {
                                 Text(
                                     text = "Additional information",
-                                    style = LocalTextStyle.current.copy(
-                                        fontWeight = FontWeight.Bold
-                                    ),
                                 )
-                            }
+                            },
+                            textStyle = LocalTextStyle.current,
+                            singleLine = false
                         )
                     }
                     Button(
                         onClick = {
                             onSaveClicked(newTaskName, newTaskDescription)
                         },
+                        contentPadding = PaddingValues(8.dp),
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
                     ) {
-                        Icon(Icons.Outlined.CheckCircle, null)
+                        Icon(
+                            imageVector = Icons.Outlined.CheckCircle,
+                            contentDescription = null,
+                        )
                     }
                 }
 
@@ -114,7 +143,9 @@ fun AddGroceryView(
                 horizontalArrangement = Arrangement.Center
             ) {
                 FloatingActionButton(
-                    onClick = onFabClicked,
+                    onClick = {
+                        onFabClicked()
+                    },
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
