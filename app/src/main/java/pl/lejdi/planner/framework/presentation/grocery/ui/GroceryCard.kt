@@ -1,11 +1,16 @@
 package pl.lejdi.planner.framework.presentation.grocery.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Button
@@ -20,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,7 +44,7 @@ fun GroceryCard(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = Modifier
-            .height(200.dp)
+            .animateContentSize()
             .combinedClickable(
                 onLongClick = {
                     inEditMode = true
@@ -46,31 +52,40 @@ fun GroceryCard(
                 onClick = {}
             ),
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = item.name,
-                style = LocalTextStyle.current.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier
-                    .weight(1.0f)
-            )
-            Text(
-                text = item.description ?: "",
-                modifier = Modifier
-                    .padding(top = 4.dp)
-            )
+            Column {
+                Text(
+                    text = item.name,
+                    style = LocalTextStyle.current.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                )
+                Text(
+                    text = item.description ?: "",
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                )
+            }
             Button(
                 onClick = {
-                    if(inEditMode) onEditClick(item)
+                    if (inEditMode) onEditClick(item)
                     else onCompleteClick(item)
                 },
+                contentPadding = PaddingValues(8.dp),
+                shape = CircleShape,
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
             ) {
-                Icon(Icons.Outlined.CheckCircle, null)
+                Icon(
+                    imageVector = Icons.Outlined.CheckCircle,
+                    contentDescription = null,
+                )
             }
         }
     }
