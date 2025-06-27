@@ -96,7 +96,7 @@ class UpdateTasksDates(
         val lastCleanUpDate = lastCacheCleanupDataStoreInteractor.getData()
         val currentDate = dateUtil.getToday()
         val daysFromTheLastCleanup = lastCleanUpDate.daysSinceDate(currentDate)
-        return daysFromTheLastCleanup > 0
+        return daysFromTheLastCleanup > 0 || daysFromTheLastCleanup == -1
     }
 
     private suspend fun updateCleanupDate() {
