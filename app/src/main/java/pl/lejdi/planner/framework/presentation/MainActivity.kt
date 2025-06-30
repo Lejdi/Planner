@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                     },
                     bottomBar = {
                         NavigationBar(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            containerColor = MaterialTheme.colorScheme.inversePrimary,
                             content = {
                                 val selectedItem = remember { mutableStateOf(NavigationBarItems.TASKS) }
                                 NavigationBarItems.entries.forEach { navBarItem ->
