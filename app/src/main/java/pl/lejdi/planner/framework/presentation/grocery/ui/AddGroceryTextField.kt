@@ -54,7 +54,8 @@ fun AddGroceryTextField(
             placeholder = placeholder,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
+                unfocusedContainerColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
             )
         )
     }
