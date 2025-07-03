@@ -55,6 +55,7 @@ import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTag
 import pl.lejdi.planner.framework.presentation.edittask.ui.EditTaskScreenTestTags.EDIT_TASK_SCREEN_TASK_NAME_FIELD
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskFormHelper
 import pl.lejdi.planner.framework.presentation.edittask.util.EditTaskRadioButton
+import java.util.Date
 
 @Serializable
 data class EditTaskScreenRoute(
@@ -89,7 +90,7 @@ fun EditTaskScreen(
 
         var taskName by remember { mutableStateOf(taskDetails?.name ?: "") }
         var taskDescription by remember { mutableStateOf(taskDetails?.description ?: "") }
-        var selectedStartDate by remember { mutableStateOf(taskDetails?.startDate ?: dateUtil.getToday()) }
+        var selectedStartDate by remember { mutableStateOf(getInitialStartDate(taskDetails, dateUtil)) }
         var selectedEndDate by remember { mutableStateOf(taskDetails?.endDate) }
         var selectedTime by remember { mutableStateOf(taskDetails?.hour) }
         val daysInterval = remember {
@@ -248,6 +249,11 @@ fun EditTaskScreen(
             }
         }
     }
+}
+
+fun getInitialStartDate(taskDetails: Task?, dateUtil: DateUtil) : Date {
+    if(taskDetails?.asap == true) return dateUtil.getToday()
+    return taskDetails?.startDate ?: dateUtil.getToday()
 }
 
 object EditTaskScreenTestTags{
